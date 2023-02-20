@@ -11,4 +11,10 @@ const info = Color.fromRGBO(0, 172, 193, 1);
 const backgroundColor = Color.fromRGBO(242, 242, 245, 1.0);
 const titleColor = Color.fromRGBO(46, 41, 41, 1);
 // const backgroundColor = Colors.white;
-const String SUCCESS_MESSAGE=" You will be contacted by us very soon.";
+
+const defaultTextColor = Color.fromRGBO(1, 1, 1, 0.75);
+const defaultBorderColor = Color.fromRGBO(1, 1, 1, 0.15);
+const selectedBackgroundColor = Color.fromRGBO(255, 204, 204, 0.35);
+
+// ignore: constant_identifier_names
+const String SUCCESS_MESSAGE = "You will be contacted by us very soon.";

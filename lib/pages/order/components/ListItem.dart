@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_apps/models/application_user.dart';
 import 'package:mobile_apps/constants/color.dart' as color;
+import 'package:mobile_apps/navigation/AnimateNavigation.dart';
+import 'package:mobile_apps/pages/order/DetailOrderPage.dart';
 
 class ListItem extends StatefulWidget {
   final application_user user;
@@ -65,10 +67,8 @@ class _ListItemState extends State<ListItem> {
                     backgroundColor: Colors.black12,
                     child: Text(
                       user.initialName ?? "",
-                      // textAlign: TextAlign.justify,
                       style: const TextStyle(
                           color: Colors.black54,
-                          // fontSize: widget.size - 2.5,
                           fontWeight: FontWeight.w600,
                           fontStyle: FontStyle.normal
                       ),
@@ -111,18 +111,27 @@ class _ListItemState extends State<ListItem> {
                 ],
               ),
               ElevatedButton(
-                // onPressed: isDisabled ? null : _validateInputs,
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-                  minimumSize: const Size(15, 15),
-                  backgroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
-                    side: const BorderSide(color: color.primary)
+                onPressed: () {
+                  Navigator.of(context).push(AnimateNavigation(const DetailOrderPage()));
+                },
+                style: ButtonStyle(
+                  padding: MaterialStateProperty.all(const EdgeInsets.symmetric(vertical: 5.5, horizontal: 15)),
+                  backgroundColor: MaterialStateProperty.all(Colors.white),
+                  minimumSize: MaterialStateProperty.all(const Size(15, 15)),
+                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                      side: const BorderSide(color: color.primary)
+                  )),
+                  overlayColor: MaterialStateProperty.resolveWith<Color?>(
+                    (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.pressed)) {
+                        return const Color.fromRGBO(255, 204, 204, 1);
+                      }
+                      return null;
+                    },
                   ),
                 ),
-                child: const Text("Lihat",
+                child: const Text("Detail",
                   style: TextStyle(
                     // color: Color.fromRGBO(255, 255, 255, 1),
                     color: color.primary,

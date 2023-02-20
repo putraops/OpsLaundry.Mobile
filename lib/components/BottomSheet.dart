@@ -92,7 +92,7 @@ void bottomSheet(context, String title, Widget widget){
     //anchorPoint: Offset(-300, 0),
     builder: (BuildContext context) {
       return GestureDetector(
-        behavior: HitTestBehavior.opaque,
+        behavior: HitTestBehavior.deferToChild,
         child: Container(
           height: (MediaQuery.of(context).size.height * 0.5),
           decoration: const BoxDecoration(
@@ -107,7 +107,7 @@ void bottomSheet(context, String title, Widget widget){
               Container(
                 height: 3,
                 margin: const EdgeInsets.only(top: 10),
-                width: MediaQuery.of(context).size.width * 0.2,
+                width: MediaQuery.of(context).size.width * 0.1,
                 decoration: const BoxDecoration(
                   color: Color.fromRGBO(0, 0, 0, 0.3),
                   borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -119,7 +119,7 @@ void bottomSheet(context, String title, Widget widget){
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(title, style: const TextStyle(fontSize: 16, color: Color.fromRGBO(1, 1, 1, 0.7), fontWeight: FontWeight.w700, letterSpacing: -.25)),
+                    Text(title, style: const TextStyle(fontSize: 18, color: Color.fromRGBO(1, 1, 1, 0.8), fontWeight: FontWeight.w600, letterSpacing: -.9)),
                     GestureDetector(
                       onTap: () {
                         Navigator.pop(context);
@@ -135,248 +135,6 @@ void bottomSheet(context, String title, Widget widget){
               )
             ],
           )
-        ),
-      );
-      return Container(
-        height: (MediaQuery.of(context).size.height * 0.5),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(15.0),
-            topRight: Radius.circular(15.0),
-          ),
-        ),
-        child: Column(
-          children: [
-            Container(
-              height: 3,
-              margin: const EdgeInsets.only(top: 10),
-              width: MediaQuery.of(context).size.width * 0.2,
-              decoration: const BoxDecoration(
-                color: Color.fromRGBO(0, 0, 0, 0.3),
-                borderRadius: BorderRadius.all(Radius.circular(15.0)),
-              ),
-            ),
-
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text("Daftar Outlet", style: TextStyle(fontSize: 16, color: Color.fromRGBO(1, 1, 1, 0.7), fontWeight: FontWeight.w700, letterSpacing: -.25)),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Icon(Icons.close_outlined, color: Color.fromRGBO(1, 1, 1, 0.5)),
-                  )
-                ],
-              ),
-            ),
-            const Divider(height: 1),
-            Expanded(
-                child: Container(
-                  padding: const EdgeInsets.all(15),
-                  child: Column(
-                    //mainAxisAlignment: MainAxisAlignment.center,
-                    //mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      const Text('Modal BottomSheet',),
-                      ElevatedButton(
-                        child: const Text('Close BottomSheet', style: TextStyle(color: Colors.white)),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      const Text('Modal BottomSheet',),
-                      ElevatedButton(
-                        child: const Text('Close BottomSheet', style: TextStyle(color: Colors.white)),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      const Text('Modal BottomSheet',),
-                      ElevatedButton(
-                        child: const Text('Close BottomSheet', style: TextStyle(color: Colors.white)),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      const Text('Modal BottomSheet',),
-                      ElevatedButton(
-                        child: const Text('Close BottomSheet', style: TextStyle(color: Colors.white)),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      const Text('Modal BottomSheet',),
-                      ElevatedButton(
-                        child: const Text('Close BottomSheet', style: TextStyle(color: Colors.white)),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      const Text('Modal BottomSheet',),
-                      ElevatedButton(
-                        child: const Text('Close BottomSheet', style: TextStyle(color: Colors.white)),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      const Text('Modal BottomSheet',),
-                      ElevatedButton(
-                        child: const Text('Close BottomSheet', style: TextStyle(color: Colors.white)),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      const Text('Modal BottomSheet',),
-                      ElevatedButton(
-                        child: const Text('Close BottomSheet', style: TextStyle(color: Colors.white)),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      const Text('Modal BottomSheet',),
-                      ElevatedButton(
-                        child: const Text('Close BottomSheet', style: TextStyle(color: Colors.white)),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      const Text('Modal BottomSheet',),
-                      ElevatedButton(
-                        child: const Text('Close BottomSheet', style: TextStyle(color: Colors.white)),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      const Text('Modal BottomSheet',),
-                      ElevatedButton(
-                        child: const Text('Close BottomSheet', style: TextStyle(color: Colors.white)),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      const Text('Modal BottomSheet',),
-                      ElevatedButton(
-                        child: const Text('Close BottomSheet', style: TextStyle(color: Colors.white)),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      const Text('Modal BottomSheet',),
-                      ElevatedButton(
-                        child: const Text('Close BottomSheet', style: TextStyle(color: Colors.white)),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      const Text('Modal BottomSheet',),
-                      ElevatedButton(
-                        child: const Text('Close BottomSheet', style: TextStyle(color: Colors.white)),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      const Text('Modal BottomSheet',),
-                      ElevatedButton(
-                        child: const Text('Close BottomSheet', style: TextStyle(color: Colors.white)),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      const Text('Modal BottomSheet',),
-                      ElevatedButton(
-                        child: const Text('Close BottomSheet', style: TextStyle(color: Colors.white)),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      const Text('Modal BottomSheet',),
-                      ElevatedButton(
-                        child: const Text('Close BottomSheet', style: TextStyle(color: Colors.white)),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      const Text('Modal BottomSheet',),
-                      ElevatedButton(
-                        child: const Text('Close BottomSheet', style: TextStyle(color: Colors.white)),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      const Text('Modal BottomSheet',),
-                      ElevatedButton(
-                        child: const Text('Close BottomSheet', style: TextStyle(color: Colors.white)),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      const Text('Modal BottomSheet',),
-                      ElevatedButton(
-                        child: const Text('Close BottomSheet', style: TextStyle(color: Colors.white)),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      const Text('Modal BottomSheet',),
-                      ElevatedButton(
-                        child: const Text('Close BottomSheet', style: TextStyle(color: Colors.white)),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      const Text('Modal BottomSheet',),
-                      ElevatedButton(
-                        child: const Text('Close BottomSheet', style: TextStyle(color: Colors.white)),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      const Text('Modal BottomSheet',),
-                      ElevatedButton(
-                        child: const Text('Close BottomSheet', style: TextStyle(color: Colors.white)),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      const Text('Modal BottomSheet',),
-                      ElevatedButton(
-                        child: const Text('Close BottomSheet', style: TextStyle(color: Colors.white)),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      const Text('Modal BottomSheet',),
-                      ElevatedButton(
-                        child: const Text('Close BottomSheet', style: TextStyle(color: Colors.white)),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      const Text('Modal BottomSheet',),
-                      ElevatedButton(
-                        child: const Text('Close BottomSheet', style: TextStyle(color: Colors.white)),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      const Text('Modal BottomSheet',),
-                      ElevatedButton(
-                        child: const Text('Close BottomSheet', style: TextStyle(color: Colors.white)),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      const Text('Modal BottomSheet',),
-                      ElevatedButton(
-                        child: const Text('Close BottomSheet', style: TextStyle(color: Colors.white)),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      const Text('Modal BottomSheet',),
-                      ElevatedButton(
-                        child: const Text('Close BottomSheet', style: TextStyle(color: Colors.white)),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      const Text('Modal BottomSheet',),
-                      ElevatedButton(
-                        child: const Text('Close BottomSheet', style: TextStyle(color: Colors.white)),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      const Text('Modal BottomSheet',),
-                      ElevatedButton(
-                        child: const Text('Close BottomSheet', style: TextStyle(color: Colors.white)),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      const Text('Modal BottomSheet',),
-                      ElevatedButton(
-                        child: const Text('Close BottomSheet', style: TextStyle(color: Colors.white)),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      const Text('Modal BottomSheet',),
-                      ElevatedButton(
-                        child: const Text('Close BottomSheet', style: TextStyle(color: Colors.white)),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      const Text('Modal BottomSheet',),
-                      ElevatedButton(
-                        child: const Text('Close BottomSheet', style: TextStyle(color: Colors.white)),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      const Text('Modal BottomSheet',),
-                      ElevatedButton(
-                        child: const Text('Close BottomSheet', style: TextStyle(color: Colors.white)),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      const Text('Modal BottomSheet',),
-                      ElevatedButton(
-                        child: const Text('Close BottomSheet', style: TextStyle(color: Colors.white)),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      const Text('Modal BottomSheet',),
-                      ElevatedButton(
-                        child: const Text('Close BottomSheet', style: TextStyle(color: Colors.white)),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      const Text('Modal BottomSheet',),
-                      ElevatedButton(
-                        child: const Text('Close BottomSheet', style: TextStyle(color: Colors.white)),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                    ],
-                  ),
-                )
-            )
-          ],
         ),
       );
     },

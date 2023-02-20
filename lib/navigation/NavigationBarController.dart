@@ -24,7 +24,7 @@ class _BottomNavigationBarControllerState extends State<BottomNavigationBarContr
     const DashboardPage(
       key: PageStorageKey('DashboardPage'),
     ),
-    OrderPage(
+    const OrderPage(
       key: PageStorageKey('OrderPage'),
     ),
     const NotificationPage(

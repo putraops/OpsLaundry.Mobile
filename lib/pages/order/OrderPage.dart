@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
-
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:mobile_apps/components/CustomAppBar.dart';
-import 'package:mobile_apps/components/CircularLoadingIndicator.dart';
 import 'package:mobile_apps/constants/color.dart' as color;
+import 'package:mobile_apps/pages/order/components/Filter.dart';
 import 'package:mobile_apps/models/application_user.dart';
 import 'package:mobile_apps/pages/order/components/ListItem.dart';
 
@@ -54,71 +50,50 @@ List<application_user> Users = [
 
 
 class _OrderPageState extends State<OrderPage> {
-
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      // backgroundColor: color.backgroundColor,
+      backgroundColor: color.backgroundColor,
       body: SafeArea(
         child: Column(
           children: [
             Container(
-              height: 50,
-              // color: color.backgroundColor,
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Row(
-                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.only(top: 3.5, bottom: 3, left: 12.5, right: 5.5),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black12),
-                        borderRadius: const BorderRadius.all(Radius.circular(15))
-                    ),
-                    child: Row(
-                      children: const [
-                        Text("Semua Status", style: TextStyle(fontSize: 13, letterSpacing: -0.15),),
-                        SizedBox(width: 2.5),
-                        Icon(Icons.keyboard_arrow_down, color: Color(0xFF3D3D3D), size: 25),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 5,),
-                  // This place for selected filted
-                ],
+              color: Colors.white,
+              child: const Padding(
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: Filter(),
               ),
             ),
             Expanded(
-                child: ListView.builder(
-                    itemCount: 15, // _posts.length + (_isLastPage ? 0 : 1),
-                    itemBuilder: (context, index) {
+              child: ListView.builder(
+                itemCount: 15, // _posts.length + (_isLastPage ? 0 : 1),
+                itemBuilder: (context, index) {
 
-                      // if (index == _posts.length - _nextPageTrigger) {
-                      //   fetchData();
-                      // }
-                      // if (index == _posts.length) {
-                      //   if (_error) {
-                      //     return Center(
-                      //         child: errorDialog(size: 15)
-                      //     );
-                      //   } else {
-                      //     return const Center(
-                      //         child: Padding(
-                      //           padding: EdgeInsets.all(8),
-                      //           child: CircularProgressIndicator(),
-                      //         ));
-                      //   }
-                      // }
-                      // final Post post = _posts[index];
-                      return Column(
-                        children: [
-                          ListItem(Users[index]),
-                          const SizedBox(height: 10.0,),
-                        ],
-                      );
-                    }
-                )
+                  // if (index == _posts.length - _nextPageTrigger) {
+                  //   fetchData();
+                  // }
+                  // if (index == _posts.length) {
+                  //   if (_error) {
+                  //     return Center(
+                  //         child: errorDialog(size: 15)
+                  //     );
+                  //   } else {
+                  //     return const Center(
+                  //         child: Padding(
+                  //           padding: EdgeInsets.all(8),
+                  //           child: CircularProgressIndicator(),
+                  //         ));
+                  //   }
+                  // }
+                  // final Post post = _posts[index];
+                  return Column(
+                    children: [
+                      ListItem(Users[index]),
+                      const SizedBox(height: 10.0,),
+                    ],
+                  );
+                }
+              )
             )
 
           ],
