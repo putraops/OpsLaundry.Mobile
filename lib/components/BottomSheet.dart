@@ -81,7 +81,7 @@ void draggableBottomSheet(context, Widget widget) {
   );
 }
 
-void bottomSheet(context, String title, Widget widget, { double? size = 0.5 }) {
+void bottomSheet(context, String title, Widget widget, { double? size = 0.5, bool? hasRadius = true }) {
   showModalBottomSheet<void>(
     context: context,
     backgroundColor: Colors.transparent,
@@ -94,11 +94,11 @@ void bottomSheet(context, String title, Widget widget, { double? size = 0.5 }) {
         behavior: HitTestBehavior.deferToChild,
         child: Container(
           height: size == null ? MediaQuery.of(context).size.height * 0.5 : ((MediaQuery.of(context).size.height * size!) - 50),
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(15.0),
-              topRight: Radius.circular(15.0),
+              topLeft: Radius.circular(hasRadius! ? 15.0 : 0),
+              topRight:Radius.circular(hasRadius! ? 15.0 : 0),
             ),
           ),
           child: Column(

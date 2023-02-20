@@ -7,7 +7,7 @@ PreferredSize customAppBar (BuildContext context, String title, { dynamic action
     child: AppBar(
       // backgroundColor: color.primary,
       title: Text(title,
-        style: const TextStyle(fontSize: 17, color: Colors.black, letterSpacing: -.5, fontWeight: FontWeight.w600,),
+        style: const TextStyle(fontSize: 16, color: Colors.black, letterSpacing: -.5, fontWeight: FontWeight.w600,),
       ),
       centerTitle: true,
       leading: IconButton(

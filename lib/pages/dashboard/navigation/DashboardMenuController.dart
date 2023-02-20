@@ -32,7 +32,7 @@ class _DashboardMenuController extends State<DashboardMenuController> {
       Submenu("Ambil", Image.asset("assets/icons/machine-2.png", height: 50, width: 50,), () => {
         debugPrint("Ambil...")
       }),
-      Submenu("Layanan", Image.asset("assets/icons/clothes.png", height: 50, width: 50,), () => {
+      Submenu("Layanan", Image.asset("assets/icons/laundry-basket.png", height: 50, width: 50,), () => {
         Navigator.of(context).push(AnimateNavigation(const ServicePage()))
       }),
       Submenu("Outlet", Image.asset("assets/icons/store.png", height: 50, width: 50,), () => {
@@ -45,7 +45,12 @@ class _DashboardMenuController extends State<DashboardMenuController> {
         Navigator.of(context).push(AnimateNavigation(const EmployeePage()))
       }),
       Submenu("Master Data", Image.asset("assets/icons/document.png", height: 50, width: 50,), () => {
-        Navigator.of(context).push(AnimateNavigation(const MasterDataPage()))
+        bottomSheet(context,
+          "Master Data",
+          const MasterDataPage(),
+          size: 1.005,
+          hasRadius: false
+        )
       }),
       Submenu("Lainnya", Image.asset("assets/icons/four-squares.png", height: 50, width: 50,), () => {
         bottomSheet(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_apps/components/CustomAppBar.dart';
 import 'package:mobile_apps/constants/color.dart' as color;
+import 'package:mobile_apps/pages/master_data/data/menus.dart';
 import 'package:mobile_apps/pages/service/components/ServiceView.dart';
 
 class MasterDataPage extends StatefulWidget {
@@ -11,62 +13,88 @@ class MasterDataPage extends StatefulWidget {
 
 class _MasterDataPageState extends State<MasterDataPage> {
 
+  List<Widget> masterDataMenu() {
+    List<Widget> widgets = [];
+
+    for (var menu in menus) {
+      List<Widget> children = [];
+
+      if (menu.children != null) {
+        for (var child in menu.children!) {
+          children.add(
+            Column(
+              children: [
+                GestureDetector(
+                  onTap: child.onPress == null ? null : () { child.onPress!();},
+                  child: Column(
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          SizedBox(
+                            width: 50,
+                            child: child.icon!,
+                          ),
+                          const SizedBox(width: 7.5),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(child.title ?? "", style: const TextStyle(fontSize: 15.5, letterSpacing: -.5),),
+                                const SizedBox(height: 2.5,),
+                                Text(
+                                  child.description ?? "",
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(fontSize: 13, color: color.defaultTextColor, letterSpacing: -.15),
+                                ),
+                                // Text(child.description ?? "", style: const TextStyle(fontSize: 12, color: color.defaultTextColor, letterSpacing: -.15),),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 15,),
+              ],
+            )
+          );
+        }
+      }
+      widgets.add(
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const SizedBox(width: 5),
+                Text(menu.title ?? "", style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),),
+              ],
+            ),
+            const SizedBox(height: 15,),
+            Column(children: children,)
+          ],
+        )
+      );
+    }
+
+    return widgets;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: null,
-      backgroundColor: color.primary,
-      body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Container(
-              height: 70,
-              padding: const EdgeInsets.symmetric(horizontal: 0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  GestureDetector(
-                    onTap: () { Navigator.pop(context); },
-                    child: Container(
-                      width: 65,
-                      color: color.primary,
-                      alignment: Alignment.center,
-                      child: const Icon(Icons.arrow_back_ios, color: Colors.white, size: 20,),
-                    ) ,
-                  ),
-
-                  const Text('Master', style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.w600,)),
-
-                  GestureDetector(
-                    onTap: () { Navigator.pop(context); },
-                    child: Container(
-                      width: 65,
-                      color: color.primary,
-                      alignment: Alignment.center,
-                      child: Transform(
-                        transform: Matrix4.translationValues(-7.5, 5, 0),
-                        child: const Icon(Icons.more_horiz, color: Colors.white, size: 20),
-                      ),
-                    ) ,
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Container(
-                // padding: EdgeInsets.only(top: 20),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  // borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
-                ),
-                child: Center(child: Text("Master Data Page."),),
-              ),
-            ),
-          ],
-        ),
-      )
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.max,
+        children: masterDataMenu(),
+      ),
     );
   }
 }

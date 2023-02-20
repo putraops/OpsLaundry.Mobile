@@ -85,8 +85,10 @@ flutter:
     - assets/icons/dry-cleaning.png
     - assets/icons/document.png
     - assets/icons/four-squares.png
+    - assets/icons/four-squares-color.png
     - assets/icons/iron.png
     - assets/icons/laundry.png
+    - assets/icons/laundry-basket.png
     - assets/icons/machine-1.png
     - assets/icons/machine-2.png
     - assets/icons/message.png
