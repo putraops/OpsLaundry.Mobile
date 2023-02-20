@@ -1,6 +1,6 @@
-# mobile_apps
+# Ops Laundry' Mobile Application
 
-a mobile application of OpsLaundry
+a mobile application of JirehLaundry. Built with Flutter and with purpose to record transactions for each outlet and make it easier.
 
 ## Getting Started
 
