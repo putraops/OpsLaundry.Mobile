@@ -81,8 +81,7 @@ void draggableBottomSheet(context, Widget widget) {
   );
 }
 
-void bottomSheet(context, String title, Widget widget){
-  Size size = MediaQuery.of(context).size;
+void bottomSheet(context, String title, Widget widget, { double? size = 0.5 }) {
   showModalBottomSheet<void>(
     context: context,
     backgroundColor: Colors.transparent,
@@ -94,7 +93,7 @@ void bottomSheet(context, String title, Widget widget){
       return GestureDetector(
         behavior: HitTestBehavior.deferToChild,
         child: Container(
-          height: (MediaQuery.of(context).size.height * 0.5),
+          height: size == null ? MediaQuery.of(context).size.height * 0.5 : ((MediaQuery.of(context).size.height * size!) - 50),
           decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.only(

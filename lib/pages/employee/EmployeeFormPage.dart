@@ -36,7 +36,8 @@ class _EmployeeFormPageState extends State<EmployeeFormPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(context, "Form Karyawan", [
+      appBar: customAppBar(context, "Form Karyawan",
+        actions: [
           IconButton(
             color: Colors.white,
             splashColor: Colors.transparent,

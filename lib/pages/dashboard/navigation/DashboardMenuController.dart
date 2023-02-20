@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:mobile_apps/pages/dashboard/components/Submenu.dart';
 import 'package:mobile_apps/navigation/AnimateNavigation.dart';
 import 'package:mobile_apps/pages/employee/EmployeePage.dart';
+import 'package:mobile_apps/pages/outlet/OutletPage.dart';
 import 'package:mobile_apps/pages/service/ServicePage.dart';
 import 'package:mobile_apps/pages/master_data/MasterDataPage.dart';
-import 'package:mobile_apps/pages/order/OrderPage.dart';
+import 'package:mobile_apps/components/BottomSheet.dart';
 
 class DashboardMenuController extends StatefulWidget {
   const DashboardMenuController({super.key});
@@ -35,7 +36,7 @@ class _DashboardMenuController extends State<DashboardMenuController> {
         Navigator.of(context).push(AnimateNavigation(const ServicePage()))
       }),
       Submenu("Outlet", Image.asset("assets/icons/store.png", height: 50, width: 50,), () => {
-        debugPrint("Outlet...")
+        Navigator.of(context).push(AnimateNavigation(const OutletPage()))
       }),
       Submenu("Pelanggan", Image.asset("assets/icons/customer.png", height: 50, width: 50,), () => {
         debugPrint("Pelanggan...")
@@ -46,7 +47,14 @@ class _DashboardMenuController extends State<DashboardMenuController> {
       Submenu("Master Data", Image.asset("assets/icons/document.png", height: 50, width: 50,), () => {
         Navigator.of(context).push(AnimateNavigation(const MasterDataPage()))
       }),
-      Submenu("Lainnya", Image.asset("assets/icons/four-squares.png", height: 50, width: 50,), (){}),
+      Submenu("Lainnya", Image.asset("assets/icons/four-squares.png", height: 50, width: 50,), () => {
+        bottomSheet(
+          context,
+          "Menu Lainnya",
+          const Center(child: Text("A"),),
+          size: 0.8
+        )
+      }),
     ];
 
     return Padding(
