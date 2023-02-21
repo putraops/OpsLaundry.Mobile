@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_apps/pages/order/new_order/NewOrderPage.dart';
 import 'package:mobile_apps/pages/profile/ProfilePage.dart';
 import 'package:mobile_apps/pages/order/OrderPage.dart';
 import 'package:mobile_apps/pages/dashboard/DashboardPage.dart';
 import 'package:mobile_apps/pages/notification/NotificationPage.dart';
 import 'package:mobile_apps/constants/color.dart' as color;
 import 'package:mobile_apps/redux/Store.dart';
+import 'package:mobile_apps/navigation/AnimateNavigation.dart';
 
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -78,8 +80,9 @@ class _BottomNavigationBarControllerState extends State<BottomNavigationBarContr
               // print('token: ${store.state!.auth}')
               print('IsLogin: ${store.state.auth.isLogin}'),
               print('token: ${store.state.auth.token}'),
-              print('token: ${store.state.auth.user!.fullname}')
+              print('token: ${store.state.auth.user!.fullname}'),
               //StoreProvider.of<AppState>(context).dispatch(SetLogin(!store.state!.isLogin!))
+              Navigator.of(context).push(AnimateNavigation(const NewOrderPage()))
             },
             backgroundColor: color.primary,
             child: const Icon(Icons.add, size: 30,),

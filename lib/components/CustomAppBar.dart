@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_apps/constants/color.dart' as color;
 
-PreferredSize customAppBar (BuildContext context, String title, { dynamic actions }) {
+PreferredSize customAppBar (BuildContext context, String title, { dynamic actions, bool? hasElevation = true, double? height = 60 }) {
   return PreferredSize(
-    preferredSize: const Size.fromHeight(60.0),
+    preferredSize: Size.fromHeight(height ?? 60),
     child: AppBar(
       // backgroundColor: color.primary,
       title: Text(title,
@@ -20,7 +20,7 @@ PreferredSize customAppBar (BuildContext context, String title, { dynamic action
           Navigator.pop(context);
         },
       ),
-      elevation: 0.75,
+      elevation: hasElevation! ? 0.75: 0,
       actions: actions,
     ),
   );
