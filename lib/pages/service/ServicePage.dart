@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_apps/components/CustomAppBar.dart';
 import 'package:mobile_apps/constants/color.dart' as color;
 import 'package:mobile_apps/pages/service/components/ServiceView.dart';
 
@@ -14,46 +15,13 @@ class _ServicePageState extends State<ServicePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: null,
+      appBar: customAppBar(context, "Layanan"),
       backgroundColor: color.primary,
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Container(
-              height: 70,
-              padding: const EdgeInsets.symmetric(horizontal: 0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  GestureDetector(
-                    onTap: () { Navigator.pop(context); },
-                    child: Container(
-                      width: 65,
-                      color: color.primary,
-                      alignment: Alignment.center,
-                      child: const Icon(Icons.arrow_back_ios, color: Colors.white, size: 20,),
-                    ) ,
-                  ),
-
-                  const Text('Master', style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.w600,)),
-
-                  GestureDetector(
-                    onTap: () { Navigator.pop(context); },
-                    child: Container(
-                      width: 65,
-                      color: color.primary,
-                      alignment: Alignment.center,
-                      child: Transform(
-                        transform: Matrix4.translationValues(-7.5, 5, 0),
-                        child: const Icon(Icons.more_horiz, color: Colors.white, size: 20),
-                      ),
-                    ) ,
-                  ),
-                ],
-              ),
-            ),
             Expanded(
               child: Container(
                 // padding: EdgeInsets.only(top: 20),

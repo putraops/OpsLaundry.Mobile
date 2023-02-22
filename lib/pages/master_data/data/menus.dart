@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_apps/context/GlobalContext.dart';
+import 'package:mobile_apps/navigation/AnimateNavigation.dart';
+
+import 'package:mobile_apps/pages/master_data/product_category/ProductCategoryPage.dart';
+import 'package:mobile_apps/pages/service/ServicePage.dart';
 
 List<Menu> menus = [
   Menu(
@@ -12,7 +17,7 @@ List<Menu> menus = [
           child: Image.asset("assets/icons/clothes.png", height: 45, width: 45,),
         ),
         onPress: () {
-          print("Barang");
+          Navigator.pop(NavigationService.navigatorKey.currentContext!);
         }
       ),
       Menu(
@@ -22,7 +27,8 @@ List<Menu> menus = [
           child: Image.asset("assets/icons/four-squares-color.png", height: 45, width: 45,),
         ),
         onPress: () {
-          print("Kategori Barang");
+          Navigator.pop(NavigationService.navigatorKey.currentContext!);
+          Navigator.of(NavigationService.navigatorKey.currentContext!).push(AnimateNavigation(const ProductCategoryPage()));
         }
       ),
     ]
@@ -38,7 +44,8 @@ List<Menu> menus = [
           child: Image.asset("assets/icons/laundry-basket.png", height: 40, width: 40,),
         ),
         onPress: () {
-          print("Layanan");
+          Navigator.pop(NavigationService.navigatorKey.currentContext!);
+          Navigator.of(NavigationService.navigatorKey.currentContext!).push(AnimateNavigation(const ServicePage()));
         }
       ),
     ]

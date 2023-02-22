@@ -48,7 +48,7 @@ class _MasterDataPageState extends State<MasterDataPage> {
                                   child.description ?? "",
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(fontSize: 13, color: color.defaultTextColor, letterSpacing: -.15),
+                                  style: const TextStyle(fontSize: 12, color: color.defaultTextColor, letterSpacing: -.15),
                                 ),
                                 // Text(child.description ?? "", style: const TextStyle(fontSize: 12, color: color.defaultTextColor, letterSpacing: -.15),),
                               ],
