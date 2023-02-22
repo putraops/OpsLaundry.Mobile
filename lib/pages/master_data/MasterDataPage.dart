@@ -37,7 +37,7 @@ class _MasterDataPageState extends State<MasterDataPage> {
                             width: 50,
                             child: child.icon!,
                           ),
-                          const SizedBox(width: 7.5),
+                          const SizedBox(width: 10),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,7 +75,7 @@ class _MasterDataPageState extends State<MasterDataPage> {
                 Text(menu.title ?? "", style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),),
               ],
             ),
-            const SizedBox(height: 15,),
+            const SizedBox(height: 20,),
             Column(children: children,)
           ],
         )
