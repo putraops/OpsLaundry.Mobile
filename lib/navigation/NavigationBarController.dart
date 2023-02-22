@@ -51,7 +51,7 @@ class _BottomNavigationBarControllerState extends State<BottomNavigationBarContr
         label: 'Dashboard',
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.shopping_cart),
+        icon: Icon(Icons.list_alt),
         label: 'Pesanan',
       ),
       BottomNavigationBarItem(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_apps/constants/color.dart' as color;
-import 'package:mobile_apps/pages/order/components/Filter.dart';
+import 'package:mobile_apps/pages/order/components/FilterBar.dart';
 import 'package:mobile_apps/models/application_user.dart';
 import 'package:mobile_apps/pages/order/components/ListItem.dart';
 

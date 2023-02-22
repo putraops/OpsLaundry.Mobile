@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:mobile_apps/components/CustomAppBar.dart';
 import 'package:mobile_apps/pages/order/new_order/components/HeaderBar.dart';
 import 'package:mobile_apps/pages/order/new_order/components/ListItem.dart';
-import 'package:mobile_apps/constants/color.dart' as color;
 import 'package:mobile_apps/pages/order/new_order/components/NewItem.dart';
 import 'package:mobile_apps/pages/order/new_order/components/PaymentBar.dart';
+import 'package:mobile_apps/components/GreySeparator.dart';
 
 class NewOrderPage extends StatefulWidget {
   const NewOrderPage({Key? key}) : super(key: key);
@@ -14,14 +14,10 @@ class NewOrderPage extends StatefulWidget {
 }
 
 List<Widget> items = [
-  listSeparator(height: 1),
+  const GreySeparator(height: 1),
   const ListItem(),
   const ListItem(),
 ];
-
-Widget listSeparator({ double? height = 10 }){
-  return Container(height: height ?? 10, color: color.backgroundColor,);
-}
 
 class _NewOrderPageState extends State<NewOrderPage> {
   final double fixInformationHeight = 50;
@@ -49,7 +45,7 @@ class _NewOrderPageState extends State<NewOrderPage> {
                 itemBuilder: (BuildContext context, int index) {
                   return items[index];
                 },
-                separatorBuilder: (BuildContext context, int index) => listSeparator(),
+                separatorBuilder: (BuildContext context, int index) => const GreySeparator(),
               ),
             ),
             HeaderBar(height: fixInformationHeight, width: MediaQuery.of(context).size.width,),

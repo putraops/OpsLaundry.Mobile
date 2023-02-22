@@ -14,7 +14,6 @@ class ListItem extends StatefulWidget {
 }
 
 class _ListItemState extends State<ListItem> {
-
   Widget isAdmin() {
     return Column(
       children: [

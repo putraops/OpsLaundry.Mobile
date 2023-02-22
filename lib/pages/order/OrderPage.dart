@@ -1,23 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-import 'package:mobile_apps/constants/color.dart' as color;
-import 'package:mobile_apps/pages/order/components/Filter.dart';
+import 'package:mobile_apps/pages/order/components/FilterBar.dart';
 import 'package:mobile_apps/models/application_user.dart';
 import 'package:mobile_apps/pages/order/components/ListItem.dart';
+import 'package:mobile_apps/pages/order/components/SearchBar.dart';
+import 'package:mobile_apps/components/GreySeparator.dart';
 
 void main() async {
   SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(
-        //Lets make the Status Bar Transparent
-        statusBarColor: Colors.white,
-        //Lets make the status bar icon brightness to bright
-        statusBarIconBrightness: Brightness.dark,
-      )
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.black,
+      statusBarIconBrightness: Brightness.light,
+    )
   );
-
-  //WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  //FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-
   runApp(const OrderPage());
 }
 
@@ -50,53 +46,91 @@ List<application_user> Users = [
 
 
 class _OrderPageState extends State<OrderPage> {
+  bool switchValue = true;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: color.backgroundColor,
-      body: SafeArea(
-        child: Column(
-          children: [
-            Container(
-              color: Colors.white,
-              child: const Padding(
-                padding: EdgeInsets.symmetric(vertical: 10),
-                child: Filter(),
+    return GestureDetector(
+      onTap: () {
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 10,),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SearchBar(
+                      width: (MediaQuery.of(context).size.width * 0.85) - 15,
+                      counterCallback: (value) {
+                        print("value: " + value!);
+                      },
+                    ),
+                    Container(
+                      width: (MediaQuery.of(context).size.width * 0.15) - 15,
+                      alignment: const Alignment(0.99, 0),
+                      child: GestureDetector(
+                        onTap: () {
+
+                        },
+                        child: ClipRRect(
+                          child: Image.asset("assets/icons/scanner-black.png", height: 28, width: 28,),
+                        ),
+                      ),
+                    ),
+                    // Expanded(
+                    //   child: ),
+                  ],
+                ),
               ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: 15, // _posts.length + (_isLastPage ? 0 : 1),
-                itemBuilder: (context, index) {
-
-                  // if (index == _posts.length - _nextPageTrigger) {
-                  //   fetchData();
-                  // }
-                  // if (index == _posts.length) {
-                  //   if (_error) {
-                  //     return Center(
-                  //         child: errorDialog(size: 15)
-                  //     );
-                  //   } else {
-                  //     return const Center(
-                  //         child: Padding(
-                  //           padding: EdgeInsets.all(8),
-                  //           child: CircularProgressIndicator(),
-                  //         ));
-                  //   }
-                  // }
-                  // final Post post = _posts[index];
-                  return Column(
-                    children: [
-                      ListItem(Users[index]),
-                      const SizedBox(height: 10.0,),
-                    ],
-                  );
-                }
+              Container(
+                color: Colors.white,
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  child: Filter(),
+                ),
+              ),
+              Expanded(
+                  child: ListView.separated(
+                    itemCount: 15, // _posts.length + (_isLastPage ? 0 : 1),
+                    itemBuilder: (context, index) {
+                      // if (index == _posts.length - _nextPageTrigger) {
+                      //   fetchData();
+                      // }
+                      // if (index == _posts.length) {
+                      //   if (_error) {
+                      //     return Center(
+                      //         child: errorDialog(size: 15)
+                      //     );
+                      //   } else {
+                      //     return const Center(
+                      //         child: Padding(
+                      //           padding: EdgeInsets.all(8),
+                      //           child: CircularProgressIndicator(),
+                      //         ));
+                      //   }
+                      // }
+                      // final Post post = _posts[index];
+                      return Column(
+                        children: [
+                          ListItem(Users[index]),
+                          const SizedBox(height: 10.0,),
+                        ],
+                      );
+                    },
+                    separatorBuilder: (BuildContext context, int index) => const GreySeparator(),
+                  )
               )
-            )
 
-          ],
+            ],
+          ),
         ),
       ),
     );

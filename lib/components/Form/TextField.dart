@@ -40,12 +40,15 @@ class _TextInputState extends State<ClearableTextInput> {
       : _controller = isBlank(value)
       ? TextEditingController()
       : TextEditingController.fromValue(TextEditingValue(text: value));
-  @override  void initState() {
+
+  @override
+  void initState() {
     _controller.addListener(() => isClearable());
     _controller.addListener(() => widget.onChange(_controller.text));
     _focus.addListener(() => focused = !focused);
     super.initState();
   }
+
   @override  void dispose() {
     _controller.dispose();
     super.dispose();
@@ -100,6 +103,7 @@ class CustomTextFormField extends StatefulWidget {
   final InputBorder? border;
   final InputBorder? borderFocused;
   final Widget? prefixIcon;
+  final double? suffixIconSize;
   final TextInputAction? textInputAction;
   final List<TextInputFormatter>? inputFormatter;
   final regEx = RegExp(CustomTextFormField.pattern);
@@ -124,6 +128,7 @@ class CustomTextFormField extends StatefulWidget {
     this.border,
     this.borderFocused,
     this.prefixIcon,
+    this.suffixIconSize,
     this.textInputAction,
     this.value
   });
@@ -172,6 +177,7 @@ class CustomTextFormFieldState extends State<CustomTextFormField> {
       decoration: InputDecoration(
         // filled: true,
         // fillColor: Colors.lightGreen,
+        // isDense: true,
         border: widget.border ?? const OutlineInputBorder(),
         contentPadding: widget.contentPadding ?? const EdgeInsets.symmetric(vertical: 17.5),
         errorStyle: const TextStyle(color: color.primary, fontSize: 14),
@@ -183,26 +189,48 @@ class CustomTextFormFieldState extends State<CustomTextFormField> {
           borderSide: const BorderSide(color: Colors.red, width: 1),
           borderRadius: BorderRadius.circular(50),
         ),
+        focusedBorder: widget.borderFocused ?? const OutlineInputBorder(),
         focusedErrorBorder: OutlineInputBorder(
           borderSide: const BorderSide(color: Colors.red, width: 1.75),
           borderRadius: BorderRadius.circular(50),
         ),
-        focusedBorder: widget.borderFocused ?? const OutlineInputBorder(),
         hintText: widget.hintText ?? "",
         labelText: widget.labelText,
         prefixIcon: widget.prefixIcon,
         prefixIconColor: Color.fromRGBO(0, 0, 0, !(widget!.disabled!) ? 0.5 : 0.3),
+        // prefixStyle: TextStyle(),
         suffixIcon: widget.obscureText == true ?
           InkWell(
             child: _obscureText ?
-              Icon(Icons.visibility_off, size: 22.5, color: Color.fromRGBO(0, 0, 0, !(widget!.disabled!) ? 0.5 : 0.3)) :
-              Icon(Icons.visibility, size: 22.5, color: Color.fromRGBO(0, 0, 0, !(widget!.disabled!) ? 0.5 : 0.3)),
+              Icon(Icons.visibility_off, size: widget.suffixIconSize ?? 22.5, color: Color.fromRGBO(0, 0, 0, !(widget!.disabled!) ? 0.5 : 0.3)) :
+              Icon(Icons.visibility, size: widget.suffixIconSize ?? 22.5, color: Color.fromRGBO(0, 0, 0, !(widget!.disabled!) ? 0.5 : 0.3)),
             onTap: () => _toggle(),
           ) : (
-          touched ? InkWell(
-            child: Icon(Icons.highlight_off, size: 22.5, color: Color.fromRGBO(0, 0, 0, !(widget!.disabled!) ? 0.5 : 0.3)),
-            onTap: () => _clearInput(),
-          ) : null
+            touched ? InkWell(
+              child: Icon(Icons.highlight_off, size: 22.5, color: Color.fromRGBO(0, 0, 0, !(widget!.disabled!) ? 0.5 : 0.3)),
+              onTap: () => _clearInput(),
+            ) : null
+          // touched ? GestureDetector(
+          //  /* child: InkWell(
+          //     child:
+          //
+          //   ),*/
+          //   // child: SizedBox(
+          //   //   width: 0,
+          //   //   child: Icon(Icons.highlight_off, size: widget.suffixIconSize ?? 22.5, color: Color.fromRGBO(0, 0, 0, !(widget!.disabled!) ? 0.5 : 0.3)),
+          //   // ),
+          //   // child: Padding(
+          //   //   padding: EdgeInsets.symmetric(horizontal: 5),
+          //   //   child: Icon(Icons.highlight_off),
+          //   // ),
+          //   child: Container(
+          //     color: Colors.red,
+          //     width: 0,
+          //     alignment: Alignment(-0.99, 0.0),
+          //     child: Icon(Icons.highlight_off, size: widget.suffixIconSize ?? 22.5, color: Color.fromRGBO(0, 0, 0, !(widget!.disabled!) ? 0.5 : 0.3)),
+          //   ),
+          //   onTap: () => _clearInput(),
+          // ) : null
         ),
       ),
     );
