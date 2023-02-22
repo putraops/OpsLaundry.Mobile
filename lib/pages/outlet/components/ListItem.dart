@@ -43,7 +43,7 @@ class _ListItemState extends State<ListItem> {
     application_user user = widget.user;
     return Container(
       color: Colors.white,
-      padding: const EdgeInsets.symmetric(vertical: 12.5, horizontal: 15),
+      padding: const EdgeInsets.all(15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
