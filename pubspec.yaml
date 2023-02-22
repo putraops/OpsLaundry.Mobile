@@ -100,7 +100,9 @@ flutter:
     - assets/icons/towels.png
     - assets/icons/trash.png
     - assets/icons/scanner-black.png
+    - assets/icons/scanner-black-64.png
     - assets/icons/scanner-white.png
+    - assets/icons/scanner-white-64.png
     - assets/icons/warning.png
     - assets/icons/washing-machine.png
     - assets/icons/flag/indonesia.png

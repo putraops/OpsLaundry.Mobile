@@ -79,7 +79,7 @@ class DashboardPage extends StatelessWidget {
 
               Container(
                 // margin: const EdgeInsets.only(top: 20, bottom: 0),
-                margin: const EdgeInsets.symmetric(vertical: 15),
+                margin: const EdgeInsets.symmetric(vertical: 20),
                 child: const DashboardMenuController(),
               ),
 

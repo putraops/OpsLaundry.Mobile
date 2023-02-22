@@ -24,11 +24,11 @@ class _DashboardMenuController extends State<DashboardMenuController> {
   @override
   Widget build(BuildContext context) {
     List<Widget> menu = [
+      Submenu("Scan QR", Image.asset("assets/icons/scanner-black-64.png", height: 50, width: 50,), () => {
+        debugPrint("Ambil...")
+      }),
       Submenu("Pesanan", Image.asset("assets/icons/washing-machine.png", height: 50, width: 50,), () => {
         debugPrint("Pesanan...")
-      }),
-      Submenu("Ambil", Image.asset("assets/icons/machine-2.png", height: 50, width: 50,), () => {
-        debugPrint("Ambil...")
       }),
       Submenu("Layanan", Image.asset("assets/icons/laundry-basket.png", height: 50, width: 50,), () => {
         Navigator.of(context).push(AnimateNavigation(const ServicePage()))
