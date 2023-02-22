@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_apps/pages/order/components/FilterBar.dart';
 import 'package:mobile_apps/models/application_user.dart';
@@ -43,10 +42,7 @@ List<application_user> Users = [
   application_user(id: "id", createdAt: DateTime.now(), organizationName: "Jireh Laundry", tenantName: "Amplas 32", fullname: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.", initialName: "NO"),
 ];
 
-
-
 class _OrderPageState extends State<OrderPage> {
-  bool switchValue = true;
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +74,6 @@ class _OrderPageState extends State<OrderPage> {
                       alignment: const Alignment(0.99, 0),
                       child: GestureDetector(
                         onTap: () {
-
                         },
                         child: ClipRRect(
                           child: Image.asset("assets/icons/scanner-black.png", height: 28, width: 28,),
