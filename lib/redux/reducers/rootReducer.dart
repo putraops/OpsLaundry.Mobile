@@ -13,8 +13,8 @@ LoginState _setLogin(LoginState value, SetLogin action) {
   return action.value;
 }
 
-LoginState _getUser(LoginState value) {
-  return value;
+application_user _getUser(LoginState value) {
+  return value!.user!;
 }
 
 application_user _setUser(application_user value, SetUser action) {

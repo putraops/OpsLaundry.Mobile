@@ -28,7 +28,7 @@ class _NewOrderPageState extends State<NewOrderPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: customAppBar(context,
-        "Pesanan Baru",
+        title: "Pesanan Baru",
         hasElevation: false,
         actions: [
           const NewItem(),

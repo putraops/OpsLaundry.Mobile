@@ -15,7 +15,7 @@ class _ServicePageState extends State<ServicePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customAppBar(context, "Layanan"),
+      appBar: customAppBar(context, title: "Layanan"),
       backgroundColor: color.primary,
       body: SafeArea(
         child: Column(

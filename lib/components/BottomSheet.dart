@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 
 const _backgroundColor = Colors.transparent;
+const double _nav = 13;
+const double _header = 50;
+const double _separator = 1;
+
+double calculateHeightInPixel(double screenHeight, double contentHeight) {
+  return ((contentHeight / screenHeight) * screenHeight) + _nav + _header + _separator;
+}
 
 void draggableBottomSheet(context, Widget widget) {
   Size size = MediaQuery.of(context).size;
@@ -81,7 +88,7 @@ void draggableBottomSheet(context, Widget widget) {
   );
 }
 
-void bottomSheet(context, String title, Widget widget, { double? size = 0.5, bool? hasRadius = true }) {
+void bottomSheet(context, String title, Widget widget, { double? size = 0.5, bool? inPixel = false, double? sizeInPixel = 0, bool? hasRadius = true }) {
   showModalBottomSheet<void>(
     context: context,
     backgroundColor: Colors.transparent,
@@ -93,7 +100,8 @@ void bottomSheet(context, String title, Widget widget, { double? size = 0.5, boo
       return GestureDetector(
         behavior: HitTestBehavior.deferToChild,
         child: Container(
-          height: size == null ? MediaQuery.of(context).size.height * 0.5 : ((MediaQuery.of(context).size.height * size!) - 50),
+          height: inPixel! == true ? (sizeInPixel! > 0 ? calculateHeightInPixel(MediaQuery.of(context).size.height, sizeInPixel!) : MediaQuery.of(context).size.height * 0.5) :
+            (size == null ? MediaQuery.of(context).size.height * 0.5 : ((MediaQuery.of(context).size.height * size!) - 50)),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.only(
@@ -105,7 +113,7 @@ void bottomSheet(context, String title, Widget widget, { double? size = 0.5, boo
             children: [
               Container(
                 height: 3,
-                margin: const EdgeInsets.only(top: 10),
+                margin: const EdgeInsets.only(top: _nav - 3),
                 width: MediaQuery.of(context).size.width * 0.1,
                 decoration: const BoxDecoration(
                   color: Color.fromRGBO(0, 0, 0, 0.3),
@@ -113,7 +121,10 @@ void bottomSheet(context, String title, Widget widget, { double? size = 0.5, boo
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                height: _header,
+                // color: Colors.yellow,
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                alignment: AlignmentDirectional.centerStart,
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -128,9 +139,12 @@ void bottomSheet(context, String title, Widget widget, { double? size = 0.5, boo
                   ],
                 ),
               ),
-              const Divider(height: 1),
+              const Divider(height: _separator),
               Expanded(
+                child: Align(
+                  alignment: AlignmentDirectional.topStart,
                   child: SingleChildScrollView(child: widget,),
+                ),
               )
             ],
           )

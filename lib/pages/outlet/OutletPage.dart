@@ -28,7 +28,7 @@ class _OutletPageState extends State<OutletPage> {
       },
       child: Scaffold(
         backgroundColor: color.backgroundColor,
-        appBar: customAppBar(context, "Daftar Outlet"),
+        appBar: customAppBar(context, title: "Daftar Outlet"),
         body: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
