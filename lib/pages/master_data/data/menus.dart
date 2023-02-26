@@ -3,6 +3,7 @@ import 'package:mobile_apps/context/GlobalContext.dart';
 import 'package:mobile_apps/navigation/AnimateNavigation.dart';
 
 import 'package:mobile_apps/pages/master_data/product_category/ProductCategoryPage.dart';
+import 'package:mobile_apps/pages/master_data/service_type/ServiceTypePage.dart';
 import 'package:mobile_apps/pages/service/ServicePage.dart';
 
 List<Menu> menus = [
@@ -37,6 +38,17 @@ List<Menu> menus = [
     title: "Layanan",
     icon: null,
     children: [
+      Menu(
+          title: "Tipe",
+          description: "Tipe Layanan yang tersedia dalam suatu Laundry.",
+          icon: ClipRRect(
+            child: Image.asset("assets/icons/question-mark.png", height: 40, width: 40,),
+          ),
+          onPress: () {
+            Navigator.pop(NavigationService.navigatorKey.currentContext!);
+            Navigator.of(NavigationService.navigatorKey.currentContext!).push(AnimateNavigation(const ServiceTypePage()));
+          }
+      ),
       Menu(
         title: "Layanan",
         description: "Jenis Layanan yang tersedia dalam suatu Laundry.",

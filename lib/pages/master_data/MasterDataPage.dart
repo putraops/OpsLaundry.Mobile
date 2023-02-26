@@ -22,46 +22,42 @@ class _MasterDataPageState extends State<MasterDataPage> {
       if (menu.children != null) {
         for (var child in menu.children!) {
           children.add(
-            Column(
-              children: [
-                GestureDetector(
-                  onTap: child.onPress == null ? null : () { child.onPress!();},
-                  child: Column(
+            GestureDetector(
+              onTap: child.onPress == null ? null : () { child.onPress!();},
+              child: Column(
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.max,
                     children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          SizedBox(
-                            width: 50,
-                            child: child.icon!,
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(child.title ?? "", style: const TextStyle(fontSize: 15.5, letterSpacing: -.5),),
-                                const SizedBox(height: 2.5,),
-                                Text(
-                                  child.description ?? "",
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(fontSize: 12, color: color.defaultTextColor, letterSpacing: -.15),
-                                ),
-                                // Text(child.description ?? "", style: const TextStyle(fontSize: 12, color: color.defaultTextColor, letterSpacing: -.15),),
-                              ],
-                            ),
-                          )
-                        ],
+                      SizedBox(
+                        width: 50,
+                        child: child.icon!,
                       ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(child.title ?? "", style: const TextStyle(fontSize: 15, letterSpacing: -.25),),
+                            const SizedBox(height: 2,),
+                            Text(
+                              child.description ?? "",
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(fontSize: 13, color: color.defaultTextColor, letterSpacing: -.15),
+                            ),
+                            // Text(child.description ?? "", style: const TextStyle(fontSize: 12, color: color.defaultTextColor, letterSpacing: -.15),),
+                          ],
+                        ),
+                      )
                     ],
                   ),
-                ),
-                const SizedBox(height: 15,),
-              ],
-            )
+                  const SizedBox(height: 15,),
+                ],
+              ),
+            ),
           );
         }
       }

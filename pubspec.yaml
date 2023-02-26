@@ -100,6 +100,7 @@ flutter:
     - assets/icons/name-tag.png
     - assets/icons/no-data.png
     - assets/icons/product.png
+    - assets/icons/question-mark.png
     - assets/icons/store.png
     - assets/icons/tags.png
     - assets/icons/towels.png
