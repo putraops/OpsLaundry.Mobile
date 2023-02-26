@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_apps/components/BottomSheet.dart';
 import 'package:mobile_apps/components/Filter/ListActiveStatus.dart';
+import 'package:mobile_apps/components/Filter/ListOrganization.dart';
 import 'package:mobile_apps/helper/ActiveStatus.dart';
 import 'package:mobile_apps/constants/color.dart' as color;
 import'package:mobile_apps/helper/FilterRequest.dart';
+import 'package:mobile_apps/models/organization.dart';
 
 class FilterBar extends StatefulWidget {
   final Future Function(FilterRequest) onFilter;
@@ -20,6 +22,7 @@ class FilterBar extends StatefulWidget {
 class _FilterBarState extends State<FilterBar> {
   late FilterRequest filter;
   ActiveStatus? _activeStatus;
+  organization? _organization;
   final double boxSize = 30;
   final double boxRadius = 7.5;
 
@@ -30,8 +33,6 @@ class _FilterBarState extends State<FilterBar> {
   }
 
   Future<void> setOrderStatus(ActiveStatus? value) async {
-    //print("setOrderStatus");
-    //print(value);
     setState(() {
       _activeStatus = value;
     });
@@ -40,14 +41,18 @@ class _FilterBarState extends State<FilterBar> {
     await widget.onFilter(filter);
   }
 
-  Future<void> setOutletId(String? value) async {
-    filter.tenantId = value;
+  Future<void> setOrganization(organization? value) async {
+    setState(() {
+      _organization = value;
+    });
+    filter.organizationId = value?.id;
     await widget.onFilter(filter);
   }
 
   Future<void> resetStatus() async {
     setState(() {
       _activeStatus = null;
+      _organization = null;
     });
     widget.onFilter(FilterRequest());
   }
@@ -81,7 +86,7 @@ class _FilterBarState extends State<FilterBar> {
           padding: const EdgeInsets.symmetric(horizontal: 15),
           scrollDirection: Axis.horizontal,
           children: [
-            if (_activeStatus != null) clearFilter(),
+            if (_organization != null || _activeStatus != null) clearFilter(),
             GestureDetector(
               onTap: () {
                 bottomSheet(
@@ -119,28 +124,30 @@ class _FilterBarState extends State<FilterBar> {
               onTap: () {
                 bottomSheet(
                   context,
-                  "Pilih Outlet",
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 15),
-                    child: Center(
-                      heightFactor: 3,
-                      child: Text("Pilih Outlet"),
+                  "Pilih Organisasi",
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child:
+                    ListOrganization(
+                      selected: _organization,
+                      onSelect: (value) async => await setOrganization(value),
                     ),
                   ),
-                  size: 0.6
+                  size: 0.8
                 );
               },
               child: Container(
                 padding: const EdgeInsets.only(left: 12.5, right: 5.5),
                 decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black12),
-                    borderRadius: BorderRadius.all(Radius.circular(boxRadius))
+                  border: Border.all(color: _organization == null ? color.defaultBorderColor : color.primary),
+                  borderRadius: BorderRadius.all(Radius.circular(boxRadius)),
+                  color: _organization == null ? Colors.transparent : color.selectedBackgroundColor,
                 ),
                 child: Row(
-                  children: const [
-                    Text("Semua Outlet", style: TextStyle(fontSize: 13, color: color.defaultTextColor, letterSpacing: -0.15),),
-                    SizedBox(width: 2),
-                    Icon(Icons.keyboard_arrow_down, color: Color(0xFF3D3D3D), size: 25),
+                  children: [
+                    Text(_organization?.name ?? "Semua Organisasi", style: TextStyle(fontSize: 13, color: _organization == null ? color.defaultTextColor : color.primary, letterSpacing: -0.15),),
+                    const SizedBox(width: 2),
+                    Icon(Icons.keyboard_arrow_down, color: _organization == null ? color.defaultTextColor : color.primary, size: 25),
                   ],
                 ),
               ),

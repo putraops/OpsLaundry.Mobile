@@ -6,8 +6,8 @@ import 'package:json_annotation/json_annotation.dart';
 class tenant {
   String? id;
   bool? isActive = false;
-  bool? isLocked;
-  bool? isDefault;
+  bool? isLocked = false;
+  bool? isDefault = false;
   String? ownerId;
   DateTime? createdAt;
   String? createdBy;

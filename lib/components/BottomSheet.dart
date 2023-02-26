@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 const _backgroundColor = Colors.transparent;
 const double _nav = 13;
-const double _header = 50;
+const double _header = 55;
 const double _separator = 1;
 
 double calculateHeightInPixel(double screenHeight, double contentHeight) {

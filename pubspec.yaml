@@ -98,6 +98,7 @@ flutter:
     - assets/icons/machine-2.png
     - assets/icons/message.png
     - assets/icons/name-tag.png
+    - assets/icons/no-data.png
     - assets/icons/product.png
     - assets/icons/store.png
     - assets/icons/tags.png

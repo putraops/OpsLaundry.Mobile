@@ -143,7 +143,7 @@ class _ListItemState extends State<ListItem> {
                       record.description ?? "",
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 13, color: Colors.black54, letterSpacing: -.25)
+                      style: const TextStyle(fontSize: 13, color: Color.fromRGBO(1, 1, 1, 0.8),)
                   )
                 ],
               ),

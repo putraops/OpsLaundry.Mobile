@@ -3,11 +3,11 @@ import 'package:json_annotation/json_annotation.dart';
 
 // ignore_for_file: camel_case_types
 @JsonSerializable()
-class product_category {
-  late String id;
+class organization {
+  String? id;
   bool? isActive = false;
-  bool? isLocked;
-  bool? isDefault;
+  bool? isLocked = false;
+  bool? isDefault = false;
   String? ownerId;
   DateTime? createdAt;
   String? createdBy;
@@ -17,8 +17,6 @@ class product_category {
   String? approvedBy;
   DateTime? submittedAt;
   String? submittedBy;
-  String? organizationId;
-  String? organizationName;
 
   String? name;
   String? description;
@@ -28,8 +26,8 @@ class product_category {
   String? recordSubmitted;
   String? recordApproved;
 
-  product_category({
-    required this.id,
+  organization({
+    this.id,
     this.isActive,
     this.isLocked,
     this.isDefault,
@@ -42,10 +40,8 @@ class product_category {
     this.approvedBy,
     this.submittedAt,
     this.submittedBy,
-    this.organizationId,
-    this.organizationName,
 
-    required this.name,
+    this.name,
     this.description,
 
     this.recordCreated,
@@ -54,7 +50,7 @@ class product_category {
     this.recordApproved
   });
 
-  product_category.fromJson(Map<String, dynamic> json) {
+  organization.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     isActive = json['is_active'];
     isLocked = json['is_locked'];
@@ -68,8 +64,6 @@ class product_category {
     submittedBy = json['submitted_by'];
     approvedAt = json['submitted_at'] == null ? null : DateTime.tryParse(json['approved_at']);
     approvedBy = json['approved_by'];
-    organizationId = json['organization_id'];
-    organizationName = json['organization_name'];
 
     name = json['name'];
     description = json['description'];
@@ -83,7 +77,7 @@ class product_category {
   Map<String, dynamic> toJson() => _$ObjectToJson(this);
 }
 
-Map<String, dynamic> _$ObjectToJson(product_category instance) => <String, dynamic>{
+Map<String, dynamic> _$ObjectToJson(organization instance) => <String, dynamic>{
   'id' : instance.id,
   'is_active' : instance.isActive,
   'is_locked' : instance.isLocked,
@@ -97,8 +91,6 @@ Map<String, dynamic> _$ObjectToJson(product_category instance) => <String, dynam
   'submitted_by' : instance.submittedBy,
   'approved_at' : instance.approvedAt,
   'approved_by' : instance.approvedBy,
-  'organization_id' : instance.organizationId,
-  'organization_name' : instance.organizationName,
 
   'name' : instance.name,
   'description' : instance.description,

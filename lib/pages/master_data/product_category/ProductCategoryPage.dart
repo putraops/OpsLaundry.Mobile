@@ -10,6 +10,7 @@ import 'package:mobile_apps/pages/master_data/product_category/components/Filter
 import 'package:mobile_apps/redux/appState.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:skeletons/skeletons.dart';
+import 'dart:convert';
 
 import 'package:mobile_apps/data/dummies.dart';
 
@@ -21,10 +22,6 @@ class ProductCategoryPage extends StatefulWidget {
 }
 
 class _ProductCategoryPageState extends State<ProductCategoryPage> with TickerProviderStateMixin {
-  GlobalKey<AnimatedListState>? _listKey;
-  AnimationController? _controller;
-  Tween<Offset>? _animatedTween;
-
   late List<product_category> data = [];
   bool isLoading = true;
   late FilterRequest filterRequest;
@@ -56,14 +53,20 @@ class _ProductCategoryPageState extends State<ProductCategoryPage> with TickerPr
   }
 
   Future<void> onFilter(FilterRequest filterRequest) async {
+    List<product_category> temp = productCategoriDummies.toList();
+
     setIsLoading(true);
     Future.delayed(const Duration(seconds: 1), () async { await setIsLoading(false); },);
     setState((){
-      if (filterRequest.isActive == null) {
-        data = productCategoriDummies.toList();
-      } else {
-        data = productCategoriDummies.where((i) => i.isActive == filterRequest.isActive).toList();
+      if (filterRequest.organizationId != null){
+        temp = temp.where((r) => r.organizationId == filterRequest.organizationId).toList();
       }
+      if (filterRequest.isActive == null) {
+        temp = temp.toList();
+      } else {
+        temp = temp.where((i) => i.isActive == filterRequest.isActive).toList();
+      }
+      data = temp;
     });
   }
   
