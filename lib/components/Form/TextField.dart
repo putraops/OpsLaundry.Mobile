@@ -2,8 +2,232 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:quiver/strings.dart';
 import 'package:mobile_apps/constants/color.dart' as color;
-// import 'package:sunmotor_project/common/validations.dart';
-// import 'package:sunmotor_project/ui/common/text.dart';
+
+class InputField extends StatefulWidget {
+  final Function(String?)? onSaved;
+  final void Function()? onChange;
+  final String? hintText;
+  final TextStyle? hintStyle;
+  final String? labelText;
+  final TextStyle? style;
+  final TextInputType keyboardType;
+  final int? maxLines;
+  final EdgeInsetsGeometry? contentPadding;
+  final bool obscureText;
+  final bool? validate;
+  final bool? disabled;
+  final bool? isDense;
+  final TextAlign? textAlign;
+  final String? value;
+  final String? errorText;
+  final TextStyle? errorStyle;
+  final InputBorder? errorBorder;
+  final InputBorder? border;
+  final InputBorder? borderFocused;
+  final Widget? prefixIcon;
+  final double? suffixIconSize;
+  final TextInputAction? textInputAction;
+  final List<TextInputFormatter>? inputFormatter;
+  final FloatingLabelBehavior? floatingLabelBehavior;
+  final regEx = RegExp(InputField.pattern);
+  static const pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+
+  InputField({
+    super.key,
+    this.onSaved,
+    this.onChange,
+    this.hintText,
+    this.hintStyle,
+    this.labelText,
+    this.errorText,
+    this.errorStyle,
+    this.errorBorder,
+    this.style,
+    this.keyboardType = TextInputType.text,
+    this.maxLines,
+    this.contentPadding,
+    this.obscureText = false,
+    this.validate = true,
+    this.disabled = false,
+    this.isDense = false,
+    this.inputFormatter,
+    this.textAlign,
+    this.border,
+    this.borderFocused,
+    this.prefixIcon,
+    this.suffixIconSize,
+    this.textInputAction,
+    this.floatingLabelBehavior = FloatingLabelBehavior.auto,
+    this.value
+  });
+
+  @override InputFieldState createState() {
+    // ignore: no_logic_in_create_state
+    return InputFieldState(value);
+  }
+}
+class InputFieldState extends State<InputField> {
+  // ignore: prefer_typing_uninitialized_variables
+  final _controller;
+  final _focus = FocusNode();
+  bool clearable = false;
+  bool focused = false;
+  bool touched;
+  bool isError = false;
+  bool _obscureText = true;
+  bool hasValue = false;
+  InputFieldState(value)  : _controller = isBlank(value) ? TextEditingController() : TextEditingController.fromValue(TextEditingValue(text: value)), touched = isNotEmpty(value);
+
+  @override
+  void initState() {
+    // _controller.addListener(() => isClearable());
+    // // _controller.addListener(() => widget.onChange!(_controller.text!));
+    // _controller.addListener(() => widget.onChange);
+    // focus.addListener(() => focused = !focused);
+
+    super.initState();
+    // _focus.addListener(_onFocusChange);
+    print("init");
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+    // _focus.removeListener(_onFocusChange);
+    _focus.dispose();
+  }
+
+  void isClearable() {
+    setState(() {
+      clearable = !isBlank(_controller.text);
+    });
+  }
+
+  void _onFocusChange() {
+    debugPrint("Focus: ${_focus.hasFocus.toString()}");
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TextFormField(
+          controller: _controller,
+          focusNode: _focus,
+          keyboardType: widget?.keyboardType ?? (widget.maxLines == 1 ? TextInputType.text : TextInputType.multiline),
+          maxLines: widget.maxLines ?? 1,
+          style: widget.style ?? const TextStyle(fontSize: 14, color: Color.fromRGBO(0, 0, 0, 0.8)),
+          inputFormatters: widget.inputFormatter,
+          obscureText: widget.obscureText ? _obscureText : false,
+          validator: (value) {
+            if (widget.validate!) {
+              String? result = widget.keyboardType == TextInputType.emailAddress ? _validateEmail(value!) : _validateValue(value!);
+              if (result != null) {
+                setState(() { isError = true; });
+                return result;
+              }
+              return null;
+            }
+            return null;
+          },
+          onChanged: (String value) => setState(() {
+            touched = isNotEmpty(value);
+            hasValue = isNotEmpty(value);
+            isError = false;
+            widget.onChange;
+          }),
+          enabled: !widget.disabled!,
+          onSaved: widget.onSaved,
+          textAlign: widget.textAlign ?? TextAlign.start,
+          textInputAction: widget.textInputAction,
+          decoration: InputDecoration(
+            isDense: widget.isDense,
+            border: widget.border,
+            hintText: widget.hintText ?? "",
+            labelText: widget.labelText,
+            hintStyle: widget?.hintStyle ?? const TextStyle(color: Color.fromRGBO(0, 0, 0, 0.35)),
+            focusedBorder: widget?.borderFocused ?? OutlineInputBorder(
+              borderSide:  const BorderSide(color: Color.fromRGBO(13, 110, 253, .7), width: 1.5),
+              borderRadius: BorderRadius.circular(2.5),
+            ),
+            focusedErrorBorder: widget?.borderFocused ?? OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.red, width: 1.75),
+              borderRadius: BorderRadius.circular(5),
+            ),
+            alignLabelWithHint: true,
+            floatingLabelBehavior: widget.floatingLabelBehavior,
+            contentPadding: widget?.contentPadding ?? const EdgeInsets.symmetric(vertical: 5, horizontal: 12.5),
+            labelStyle: TextStyle(
+              fontSize: hasValue ? 18 : 14,
+              color: touched ? Colors.black : const Color.fromRGBO(1, 1, 1, 0.75),
+            ),
+            // suffixIcon: hasValue ? IconButton(
+            //   icon: const Icon(Icons.clear, size: 20,),
+            //   disabledColor: Colors.transparent,
+            //   // onPressed: clearable ? () => WidgetsBinding.instance.addPostFrameCallback((_) => _controller.clear()) : null,
+            //   // onPressed: () {},
+            // ) : null,
+
+            disabledBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.grey, width: 1,),
+              borderRadius: BorderRadius.circular(5),
+            ),
+            errorBorder: widget?.errorBorder ?? OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.red, width: 1),
+              borderRadius: BorderRadius.circular(5),
+            ),
+            errorStyle: const TextStyle(fontSize: .1, height: 0),
+
+            prefixIcon: widget.prefixIcon,
+            prefixIconColor: Color.fromRGBO(0, 0, 0, !(widget!.disabled!) ? 0.5 : 0.3),
+          ),
+        ),
+        isError ? Column(
+          children: [
+            const SizedBox(height: 5,),
+            Text(widget?.errorText ?? "Input tidak boleh kosong.", style: widget?.errorStyle ?? const TextStyle(color: color.primary, fontSize: 13,))
+          ],
+        ) : Container()
+      ],
+    );
+  }
+
+  void _toggle() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
+  }
+
+  void _clearInput() {
+    WidgetsBinding.instance.addPostFrameCallback((_) => _controller.clear());
+    setState(() {
+      touched = false;
+    });
+  }
+
+  String? _validateValue(String value) {
+    value = value.trim();
+    if (value.isEmpty) {
+      return widget.errorText == null ? "Input tidak boleh kosong." : "${widget.errorText!}";
+    }
+    return null;
+  }
+
+  String? _validateEmail(String email) {
+    email = email.trim();
+    if (email.isEmpty) {
+      return "Email field cannot be empty";
+    } else if (!widget.regEx.hasMatch(email)) {
+      return "Invalid email: use 'email@provider.domain' form";
+    }
+    return null;
+  }
+}
+
+
+
 
 class ClearableTextInput extends StatefulWidget {
   final Function(String) onChange;

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_apps/context/GlobalContext.dart';
 import 'package:mobile_apps/navigation/AnimateNavigation.dart';
 
+import 'package:mobile_apps/pages/master_data/product/ProductPage.dart';
 import 'package:mobile_apps/pages/master_data/product_category/ProductCategoryPage.dart';
 import 'package:mobile_apps/pages/master_data/service_type/ServiceTypePage.dart';
 import 'package:mobile_apps/pages/service/ServicePage.dart';
@@ -19,6 +20,7 @@ List<Menu> menus = [
         ),
         onPress: () {
           Navigator.pop(NavigationService.navigatorKey.currentContext!);
+          Navigator.of(NavigationService.navigatorKey.currentContext!).push(AnimateNavigation(const ProductPage()));
         }
       ),
       Menu(

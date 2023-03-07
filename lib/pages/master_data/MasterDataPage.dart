@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_apps/components/CustomAppBar.dart';
 import 'package:mobile_apps/constants/color.dart' as color;
 import 'package:mobile_apps/pages/master_data/data/menus.dart';
-import 'package:mobile_apps/pages/service/components/ServiceView.dart';
 
 class MasterDataPage extends StatefulWidget {
   const MasterDataPage({Key? key}) : super(key: key);
