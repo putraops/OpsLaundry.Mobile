@@ -4,7 +4,7 @@ import 'package:quiver/strings.dart';
 import 'package:mobile_apps/constants/color.dart' as color;
 
 class InputField extends StatefulWidget {
-  final Function(String?)? onSaved;
+  final Function(dynamic)? onSaved;
   final void Function()? onChange;
   final String? hintText;
   final TextStyle? hintStyle;
@@ -87,7 +87,6 @@ class InputFieldState extends State<InputField> {
 
     super.initState();
     // _focus.addListener(_onFocusChange);
-    print("init");
   }
 
   @override

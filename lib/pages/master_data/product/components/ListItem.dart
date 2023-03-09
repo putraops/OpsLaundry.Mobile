@@ -7,7 +7,7 @@ import 'package:mobile_apps/components/CustomAlertDialog.dart';
 import 'package:mobile_apps/helper/ActiveStatus.dart';
 import 'package:mobile_apps/navigation/AnimateNavigation.dart';
 import 'package:mobile_apps/constants/color.dart' as color;
-import 'package:mobile_apps/pages/master_data/product/form/DetailFormPage.dart';
+import 'package:mobile_apps/pages/master_data/product/ProductDetailPage.dart';
 
 import 'package:mobile_apps/redux/appState.dart';
 import 'package:flutter_redux/flutter_redux.dart';

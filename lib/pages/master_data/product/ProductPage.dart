@@ -10,7 +10,6 @@ import 'package:mobile_apps/pages/master_data/product/components/FilterBar.dart'
 import 'package:mobile_apps/redux/appState.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:skeletons/skeletons.dart';
-import 'dart:convert';
 
 import 'package:mobile_apps/data/dummies.dart';
 

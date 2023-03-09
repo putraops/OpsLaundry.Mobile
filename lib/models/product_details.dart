@@ -1,4 +1,6 @@
 // ignore: depend_on_referenced_packages
+import 'dart:ffi';
+
 import 'package:json_annotation/json_annotation.dart';
 
 // ignore_for_file: camel_case_types
@@ -21,6 +23,7 @@ class product_details {
   String? organizationName;
 
   String? itemName;
+  double itemPrice = 0;
   String? productId;
   String? productName;
   String? productDescription;
@@ -55,7 +58,8 @@ class product_details {
     this.organizationId,
     this.organizationName,
 
-    this.itemName,
+    required this.itemName,
+    required this.itemPrice,
     this.productId,
     this.productName,
     this.productDescription,
@@ -92,6 +96,7 @@ class product_details {
     organizationName = json['organization_name'];
 
     itemName = json['item_name'];
+    itemPrice = json['item_price'] ?? 0;
     productId = json['product_id'];
     productName = json['product_name'];
     productDescription = json['product_description'];
@@ -131,6 +136,7 @@ Map<String, dynamic> _$ObjectToJson(product_details instance) => <String, dynami
   'organization_name' : instance.organizationName,
 
   'item_name' : instance.itemName,
+  'item_price' : instance.itemPrice,
   'product_id' : instance.productId,
   'product_name' : instance.productName,
   'product_description' : instance.productDescription,
