@@ -57,6 +57,11 @@ class _FilterBarState extends State<FilterBar> {
     widget.onFilter(FilterRequest());
   }
 
+  bool hasFilter() {
+    if (_activeStatus != null || _organization != null) return true;
+    return false;
+  }
+
   Widget clearFilter() {
     return Row(
       children: [
@@ -66,11 +71,11 @@ class _FilterBarState extends State<FilterBar> {
             padding: const EdgeInsets.only(top: 3.5, bottom: 3, left: 12.5, right: 12.5),
             height: boxSize,
             decoration: BoxDecoration(
-              border: Border.all(color: _activeStatus != null ? color.primary : Colors.black12),
+              border: Border.all(color: hasFilter() ? color.primary : Colors.black12),
               borderRadius: BorderRadius.all(Radius.circular(boxRadius)),
-              color: _activeStatus == null ? Colors.transparent : color.selectedBackgroundColor,
+              color: hasFilter() ? color.selectedBackgroundColor : Colors.transparent,
             ),
-            child: Text("X", style: TextStyle(fontSize: 14, color: _activeStatus == null ? color.defaultTextColor : color.primary, letterSpacing: -0.15),),
+            child: Text("X", style: TextStyle(fontSize: 14, color: hasFilter() ? color.primary : color.defaultTextColor, letterSpacing: -0.15),),
           ),
         ),
         const SizedBox(width: 5,),
