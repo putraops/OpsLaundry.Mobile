@@ -11,7 +11,10 @@ class FilterRequest {
     this.organizationId
   });
 
-  set setIsActive(bool value) {
+  set setIsActive(bool? value) {
+    print("setIsActive");
+    print(value);
+    print("setIsActive");
     isActive = value;
   }
 

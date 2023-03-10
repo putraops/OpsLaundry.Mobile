@@ -4,8 +4,10 @@ import 'package:mobile_apps/components/AppBarBottomSheetAction.dart';
 import 'package:mobile_apps/components/NoData.dart';
 import 'package:mobile_apps/models/product_category.dart';
 import 'package:mobile_apps/helper/FilterRequest.dart';
+import 'package:mobile_apps/pages/master_data/product_category/ProductDetailPage.dart';
 import 'package:mobile_apps/pages/master_data/product_category/components/ContentView.dart';
 import 'package:mobile_apps/pages/master_data/product_category/components/FilterBar.dart';
+import 'package:mobile_apps/navigation/AnimateNavigation.dart';
 
 import 'package:mobile_apps/redux/appState.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -52,19 +54,20 @@ class _ProductCategoryPageState extends State<ProductCategoryPage> with TickerPr
     setState(() { isLoading = value; });
   }
 
-  Future<void> onFilter(FilterRequest filterRequest) async {
+  Future<void> onFilter(FilterRequest? filterRequest) async {
+    print(filterRequest?.isActive);
     List<product_category> temp = productCategoriDummies.toList();
 
     setIsLoading(true);
     Future.delayed(const Duration(seconds: 1), () async { await setIsLoading(false); },);
     setState((){
-      if (filterRequest.organizationId != null){
-        temp = temp.where((r) => r.organizationId == filterRequest.organizationId).toList();
+      if (filterRequest?.organizationId != null){
+        temp = temp.where((r) => r.organizationId == filterRequest?.organizationId).toList();
       }
-      if (filterRequest.isActive == null) {
+      if (filterRequest?.isActive == null) {
         temp = temp.toList();
       } else {
-        temp = temp.where((i) => i.isActive == filterRequest.isActive).toList();
+        temp = temp.where((i) => i.isActive == filterRequest?.isActive).toList();
       }
       data = temp;
     });
@@ -92,7 +95,10 @@ class _ProductCategoryPageState extends State<ProductCategoryPage> with TickerPr
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   GestureDetector(
-                    onTap: (){},
+                    onTap: (){
+                      Navigator.pop(context);
+                      Navigator.of(context).push(AnimateNavigation(const ProductDetailPage()));
+                    },
                     child: Row(
                       children: [
                         Container(

@@ -8,7 +8,7 @@ import'package:mobile_apps/helper/FilterRequest.dart';
 import 'package:mobile_apps/models/organization.dart';
 
 class FilterBar extends StatefulWidget {
-  final Future Function(FilterRequest) onFilter;
+  final Future Function(FilterRequest?) onFilter;
 
   const FilterBar({
     super.key,
@@ -20,7 +20,7 @@ class FilterBar extends StatefulWidget {
 }
 
 class _FilterBarState extends State<FilterBar> {
-  late FilterRequest filter;
+  FilterRequest? filter;
   ActiveStatus? _activeStatus;
   organization? _organization;
   final double boxSize = 30;
@@ -37,7 +37,7 @@ class _FilterBarState extends State<FilterBar> {
       _activeStatus = value;
     });
 
-    filter.isActive = getStatusCode(value);
+    filter?.isActive = getStatusCode(value);
     await widget.onFilter(filter);
   }
 
@@ -45,7 +45,11 @@ class _FilterBarState extends State<FilterBar> {
     setState(() {
       _organization = value;
     });
-    filter.organizationId = value?.id;
+    print(filter?.organizationId);
+    print(filter?.isActive);
+
+    filter?.organizationId = value?.id;
+    filter?.isActive = getStatusCode(_activeStatus);
     await widget.onFilter(filter);
   }
 

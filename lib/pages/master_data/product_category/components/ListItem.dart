@@ -4,6 +4,8 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:mobile_apps/components/CustomAlertDialog.dart';
 import 'package:mobile_apps/helper/ActiveStatus.dart';
 import 'package:mobile_apps/constants/color.dart' as color;
+import 'package:mobile_apps/navigation/AnimateNavigation.dart';
+import 'package:mobile_apps/pages/master_data/product_category/ProductDetailPage.dart';
 
 import 'package:mobile_apps/redux/appState.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -100,7 +102,7 @@ class _ListItemState extends State<ListItem> {
               children: [
                 SlidableAction(
                   onPressed: (BuildContext context){
-                    debugPrint("Ubah");
+                    Navigator.of(context).push(AnimateNavigation(ProductDetailPage(record: widget.record,)));
                   },
                   backgroundColor: const Color(0xFF21B7CA),
                   foregroundColor: Colors.white,

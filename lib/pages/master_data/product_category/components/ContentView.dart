@@ -24,7 +24,7 @@ class ContentView extends StatefulWidget {
 }
 
 class ContentViewState extends State<ContentView> with TickerProviderStateMixin {
-  late final GlobalKey<AnimatedListState> _listKey; // backing data
+  GlobalKey<AnimatedListState>? _listKey; // backing data
   late final Tween<Offset>? _animatedTween;
   late ScrollController _controller;
   late List<product_category> _data;
@@ -58,8 +58,8 @@ class ContentViewState extends State<ContentView> with TickerProviderStateMixin 
   @override
   @protected
   void didUpdateWidget(covariant ContentView oldWidget) {
-    super.didUpdateWidget(oldWidget);
     _listKey = GlobalKey();
+    super.didUpdateWidget(oldWidget);
     setState(() {
       _data = widget.items;
       totalData = _data.length;
@@ -87,7 +87,7 @@ class ContentViewState extends State<ContentView> with TickerProviderStateMixin 
     _data?.insert(insertIndex, item);
     //_listKey.currentState!.insertItem(insertIndex);
 
-    _listKey.currentState?.insertItem(insertIndex,
+    _listKey!.currentState?.insertItem(insertIndex,
         duration: const Duration(milliseconds: 500)
     );
   }
@@ -125,7 +125,7 @@ class ContentViewState extends State<ContentView> with TickerProviderStateMixin 
   @override
   Widget build(BuildContext context) {
     return AnimatedList(
-      key: _listKey,
+      key: _listKey!,
       initialItemCount: totalData,
       controller: _controller,
       itemBuilder: (context, index, animation) {
