@@ -4,19 +4,19 @@ import 'package:mobile_apps/models/product_details.dart';
 import 'package:mobile_apps/constants/color.dart' as color;
 import 'package:mobile_apps/components/BottomSheet.dart';
 
-class ProductDetailForm extends StatefulWidget {
+class DetailForm extends StatefulWidget {
   final product_details? productDetailsRecord;
 
-  const ProductDetailForm({
+  const DetailForm({
     this.productDetailsRecord,
     super.key
   });
 
   @override
-  State<ProductDetailForm> createState() => _ProductDetailFormState();
+  State<DetailForm> createState() => _DetailFormState();
 }
 
-class _ProductDetailFormState extends State<ProductDetailForm> {
+class _DetailFormState extends State<DetailForm> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   AutovalidateMode? _autoValidate = AutovalidateMode.disabled;
   late bool isLoading = false;
@@ -57,7 +57,7 @@ class _ProductDetailFormState extends State<ProductDetailForm> {
                 textInputAction: TextInputAction.next,
                 floatingLabelBehavior: FloatingLabelBehavior.never,
                 contentPadding: const EdgeInsets.only(top: 2.5, bottom: 7.5),
-                hintText: "Contoh: Express 1 Hari",
+                hintText: "Contoh: Baju / Celana",
                 hintStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Color.fromRGBO(0, 0, 0, 0.375), letterSpacing: -.5),
                 errorText: "Nama tidak boleh kosong.",
                 border: const UnderlineInputBorder(),
@@ -76,7 +76,7 @@ class _ProductDetailFormState extends State<ProductDetailForm> {
               ),
 
               const SizedBox(height: 20,),
-              const Text("Layanan", style: TextStyle(fontSize: titleSize),),
+              const Text("Kategori", style: TextStyle(fontSize: titleSize),),
               const SizedBox(height: 5,),
 
               GestureDetector(
@@ -85,7 +85,7 @@ class _ProductDetailFormState extends State<ProductDetailForm> {
                   FocusManager.instance.primaryFocus?.unfocus();
                   bottomSheet(
                       context,
-                      "Pilih Layanan",
+                      "Kategori",
                       const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 15),
                         child: Center(
@@ -96,32 +96,33 @@ class _ProductDetailFormState extends State<ProductDetailForm> {
                       hasRadius: false
                   );
                 },
-                child: const Text("Pilih Layanan", style: TextStyle(fontSize: 13, color: color.primary),),
+                child: const Text("Pilih Kategori", style: TextStyle(fontSize: 13, color: color.primary),),
               ),
 
               if (isServiceIdEmpty) (
                   Column(
                     children: const [
                       SizedBox(height: 2.5,),
-                      Text("Layanan tidak boleh kosong.", style: TextStyle(fontSize: 13, color: color.primary),),
+                      Text("Kategori tidak boleh kosong.", style: TextStyle(fontSize: 13, color: color.primary),),
                     ],
                   )
               ),
 
 
               const SizedBox(height: 20,),
-              const Text("Harga", style: TextStyle(fontSize: titleSize),),
+              const Text("Keterangan", style: TextStyle(fontSize: titleSize),),
               InputField(
                 validate: true,
                 isDense: true,
+                maxLines: 3,
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.number,
                 contentPadding: const EdgeInsets.only(top: 0, bottom: 5),
                 floatingLabelBehavior: FloatingLabelBehavior.never,
-                hintText: "Contoh: 25.000",
+                hintText: "Contoh: Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
                 hintStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Color.fromRGBO(0, 0, 0, 0.375), letterSpacing: -.5),
-                errorText: "Harga tidak boleh kosong.",
-                style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w600, letterSpacing: -1.25, color: Color.fromRGBO(0, 0, 0, 0.75)),
+                errorText: "Keterangan tidak boleh kosong.",
+                // style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w600, letterSpacing: -1.25, color: Color.fromRGBO(0, 0, 0, 0.75)),
                 border: const UnderlineInputBorder(),
                 borderFocused: const UnderlineInputBorder(
                   borderSide:  BorderSide(color: Color.fromRGBO(13, 110, 253, .75), width: 1.75),

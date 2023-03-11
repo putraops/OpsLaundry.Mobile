@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:mobile_apps/components/CustomAppBar.dart';
 import 'package:mobile_apps/models/product.dart';
 import 'package:mobile_apps/models/product_details.dart';
-import 'package:mobile_apps/pages/master_data/product/form/ProductDetailForm.dart';
+import 'package:mobile_apps/pages/master_data/product/detail/form/DetailForm.dart';
 
 import 'package:mobile_apps/redux/appState.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:skeletons/skeletons.dart';
 
-class DetailFormPage extends StatefulWidget {
+class IndexPage extends StatefulWidget {
   final product productRecord;
   final product_details? productDetailsRecord;
 
-  const DetailFormPage({
+  const IndexPage({
     required this.productRecord,
     this.productDetailsRecord,
     // this.onDelete,
@@ -21,10 +21,10 @@ class DetailFormPage extends StatefulWidget {
   });
 
   @override
-  State<DetailFormPage> createState() => _DetailFormPageState();
+  State<IndexPage> createState() => _IndexPageState();
 }
 
-class _DetailFormPageState extends State<DetailFormPage> {
+class _IndexPageState extends State<IndexPage> {
   late bool isLoading = false;
   final obj = product_details(id: "", itemName: '', itemPrice: 0);
 
@@ -151,7 +151,7 @@ class _DetailFormPageState extends State<DetailFormPage> {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                      child: ProductDetailForm(productDetailsRecord: widget.productDetailsRecord,),
+                      child: DetailForm(productDetailsRecord: widget.productDetailsRecord,),
                     ),
                   ),
                 )

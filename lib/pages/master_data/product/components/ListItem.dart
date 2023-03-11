@@ -7,7 +7,7 @@ import 'package:mobile_apps/components/CustomAlertDialog.dart';
 import 'package:mobile_apps/helper/ActiveStatus.dart';
 import 'package:mobile_apps/navigation/AnimateNavigation.dart';
 import 'package:mobile_apps/constants/color.dart' as color;
-import 'package:mobile_apps/pages/master_data/product/ProductDetailPage.dart';
+import 'package:mobile_apps/pages/master_data/product/detail/IndexPage.dart';
 
 import 'package:mobile_apps/redux/appState.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -301,7 +301,7 @@ class _ListItemState extends State<ListItem> {
                             ),
                             child: const Text('Tambah', style: TextStyle(color: color.primary, fontSize: 12, letterSpacing: -.15)),
                             onPressed: () {
-                              Navigator.of(context).push(AnimateNavigation(DetailFormPage(productRecord: widget.record!,)));
+                              Navigator.of(context).push(AnimateNavigation(IndexPage(productRecord: widget.record!,)));
                             },
                           ),
                         ),

@@ -4,8 +4,10 @@ import 'package:mobile_apps/components/AppBarBottomSheetAction.dart';
 import 'package:mobile_apps/components/NoData.dart';
 import 'package:mobile_apps/models/product.dart';
 import 'package:mobile_apps/helper/FilterRequest.dart';
+import 'package:mobile_apps/pages/master_data/product/DetailPage.dart';
 import 'package:mobile_apps/pages/master_data/product/components/ContentView.dart';
 import 'package:mobile_apps/pages/master_data/product/components/FilterBar.dart';
+import 'package:mobile_apps/navigation/AnimateNavigation.dart';
 
 import 'package:mobile_apps/redux/appState.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -82,72 +84,17 @@ class _ProductPageState extends State<ProductPage> with TickerProviderStateMixin
         title: "Barang",
         centerTitle: true,
         actions: [
-          AppBarBottomSheetAction(
-            title: "Pilihan",
-            action: const Icon(Icons.more_horiz, size: 25),
-            body: Padding(
-              padding: const EdgeInsets.only(left: 12.5, right: 12.5, top: 5, bottom: 5),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  GestureDetector(
-                    onTap: (){},
-                    child: Row(
-                      children: [
-                        Container(
-                          alignment: const Alignment(-1.5, 0.0),
-                          width: 32.5,
-                          height: 50,
-                          child: const Icon(Icons.add, size: 25),
-                        ),
-                        const Text("Tambah Kategori Barang", style: TextStyle(fontSize: 14, letterSpacing: -.15),)
-                      ],
-                    ),
-                  ),
-                  const Divider(height: 1),
-                  GestureDetector(
-                    onTap: (){},
-                    child: Row(
-                      children: [
-                        Container(
-                          alignment: const Alignment(-0.99, 0.0),
-                          width: 32.5,
-                          height: 50,
-                          child: ClipRRect(
-                            child: Image.asset("assets/icons/alphabetical-sorting-ascending-black.png", height: 22.5, width: 22.5,),
-                          ),
-                        ),
-                        const Text("Urutkan Nama Abjad Terkecil", style: TextStyle(fontSize: 14, letterSpacing: -.15),)
-                      ],
-                    ),
-                  ),
-                  const Divider(height: 1),
-                  GestureDetector(
-                    onTap: (){},
-                    child: Row(
-                      children: [
-                        Container(
-                          alignment: const Alignment(-0.99, 0.0),
-                          width: 32.5,
-                          height: 50,
-                          child: ClipRRect(
-                            child: Image.asset("assets/icons/alphabetical-sorting-descending-black.png", height: 22.5, width: 22.5),
-                          ),
-                        ),
-                        const Text("Urutkan Nama Abjad Terbesar", style: TextStyle(fontSize: 14, letterSpacing: -.15),)
-                      ],
-                    ),
-                  ),
-                  const Divider(height: 1),
-                ],
-              ),
-            ),
-            size: 0.5,
-            hasRadius: false,
-            inPixel: true,
-            sizeInPixel: 180,
+          IconButton(
+            color: const Color.fromRGBO(1, 1, 1, 0.75),
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            icon: const Icon(Icons.add, size: 30),
+            tooltip: "Tambah Barang",
+            onPressed: () {
+              Navigator.of(context).push(AnimateNavigation(DetailPage(productRecord: product(id: ""),)));
+            },
           ),
-          const SizedBox(width: 15,),
+          const SizedBox(width: 5,),
         ]
       ),
       body: StoreConnector<AppState, AppState>(

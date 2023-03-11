@@ -46,7 +46,8 @@ class _DashboardMenuController extends State<DashboardMenuController> {
         bottomSheet(context,
           "Master Data",
           const MasterDataPage(),
-          size: 1.005,
+          isFullSize: true,
+          dismissSize: 0.6,
           hasRadius: false
         )
       }),
