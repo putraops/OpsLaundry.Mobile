@@ -7,6 +7,7 @@ import 'package:mobile_apps/components/CustomAlertDialog.dart';
 import 'package:mobile_apps/helper/ActiveStatus.dart';
 import 'package:mobile_apps/navigation/AnimateNavigation.dart';
 import 'package:mobile_apps/constants/color.dart' as color;
+import 'package:mobile_apps/pages/master_data/product/DetailPage.dart';
 import 'package:mobile_apps/pages/master_data/product/detail/IndexPage.dart';
 
 import 'package:mobile_apps/redux/appState.dart';
@@ -55,43 +56,6 @@ class _ListItemState extends State<ListItem> {
   void deleteById(String id) async {
     await widget.onDelete!(id, widget.index!);
   }
-
-  // Widget recordStatus(product record) {
-  //   return Column(
-  //     children: [
-  //       Row(
-  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //         children: [
-  //           (
-  //             widget.outletFilter == false ?
-  //             Container(
-  //               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 2.5),
-  //               color: color.secondaryBackgroundColor,
-  //               child: Text(record.organizationName!,
-  //                 style: const TextStyle(fontSize: 12,
-  //                     color: color.defaultTextColor,
-  //                     fontWeight: FontWeight.w600,
-  //                     letterSpacing: -.25),
-  //               ),
-  //             ) : Container()
-  //           ),
-  //           Container(
-  //             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 2.5),
-  //             color: record.isActive! ? color.successBackgroundColor : color.primaryBackgroundColor, //color.selectedBackgroundColor,
-  //             child: Text(getStatusNameByStatus(record.isActive!),
-  //               style: TextStyle(fontSize: 12,
-  //                   color: record.isActive! ? color.success : color.primary,
-  //                   fontWeight: FontWeight.w600,
-  //                   letterSpacing: -.25),
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //
-  //       const SizedBox(height: 7.5,),
-  //     ],
-  //   );
-  // }
 
   Widget children() {
     if (isLoading) {
@@ -156,7 +120,8 @@ class _ListItemState extends State<ListItem> {
             children: [
               SlidableAction(
                 onPressed: (BuildContext context){
-                  debugPrint("Ubah");
+                  // debugPrint("Ubah");
+                  Navigator.of(context).push(AnimateNavigation(DetailPage(productRecord: record,)));
                 },
                 backgroundColor: const Color(0xFF21B7CA),
                 foregroundColor: Colors.white,

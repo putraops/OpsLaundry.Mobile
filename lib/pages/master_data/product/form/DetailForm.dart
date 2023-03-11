@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_apps/components/Form/TextField.dart';
-import 'package:mobile_apps/models/product_details.dart';
+import 'package:mobile_apps/models/product.dart';
 import 'package:mobile_apps/constants/color.dart' as color;
 import 'package:mobile_apps/components/BottomSheet.dart';
 
+
 class DetailForm extends StatefulWidget {
-  final product_details? productDetailsRecord;
+  final product? record;
 
   const DetailForm({
-    this.productDetailsRecord,
+    this.record,
     super.key
   });
 
@@ -22,10 +23,12 @@ class _DetailFormState extends State<DetailForm> {
   late bool isLoading = false;
   late bool isServiceIdEmpty = false;
   static const double titleSize = 13;
-  final obj = product_details(id: "", itemName: '', itemPrice: 0);
+  late product? record;
 
   @override
   initState() {
+    // print(widget.record?.id ?? "");
+    record = widget?.record;
     super.initState();
   }
 
@@ -67,10 +70,11 @@ class _DetailFormState extends State<DetailForm> {
                 errorBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(color: Colors.red, width: 1.75),
                 ),
+                value: record?.name,
                 onSaved: (value) {
                   print(value);
                   setState(() {
-                    obj.itemName = value;
+                    record?.name = value;
                   });
                 },
               ),
@@ -96,7 +100,7 @@ class _DetailFormState extends State<DetailForm> {
                       hasRadius: false
                   );
                 },
-                child: const Text("Pilih Kategori", style: TextStyle(fontSize: 13, color: color.primary),),
+                child: Text(record?.product_category_name ?? "Pilih Kategori", style: TextStyle(fontSize: 13, color: color.primary),),
               ),
 
               if (isServiceIdEmpty) (
@@ -106,35 +110,6 @@ class _DetailFormState extends State<DetailForm> {
                       Text("Kategori tidak boleh kosong.", style: TextStyle(fontSize: 13, color: color.primary),),
                     ],
                   )
-              ),
-
-
-              const SizedBox(height: 20,),
-              const Text("Keterangan", style: TextStyle(fontSize: titleSize),),
-              InputField(
-                validate: true,
-                isDense: true,
-                maxLines: 3,
-                textInputAction: TextInputAction.next,
-                keyboardType: TextInputType.number,
-                contentPadding: const EdgeInsets.only(top: 0, bottom: 5),
-                floatingLabelBehavior: FloatingLabelBehavior.never,
-                hintText: "Contoh: Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-                hintStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Color.fromRGBO(0, 0, 0, 0.375), letterSpacing: -.5),
-                errorText: "Keterangan tidak boleh kosong.",
-                // style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w600, letterSpacing: -1.25, color: Color.fromRGBO(0, 0, 0, 0.75)),
-                border: const UnderlineInputBorder(),
-                borderFocused: const UnderlineInputBorder(
-                  borderSide:  BorderSide(color: Color.fromRGBO(13, 110, 253, .75), width: 1.75),
-                ),
-                errorBorder: const UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.red, width: 2),
-                ),
-                onSaved: (value) {
-                  setState(() {
-                    obj.itemPrice =  double.parse(value);
-                  });
-                },
               ),
 
               const SizedBox(height: 20,),
@@ -186,7 +161,7 @@ class _DetailFormState extends State<DetailForm> {
     bool isValid = true;
 
     print(formKey.currentState!.validate());
-    if (obj.serviceId == null) {
+    if (record?.product_category_id == null) {
       isValid = false;
       setState(() { isServiceIdEmpty = true; });
     }

@@ -9,10 +9,10 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:skeletons/skeletons.dart';
 
 class DetailPage extends StatefulWidget {
-  final product productRecord;
+  final product? productRecord;
 
   const DetailPage({
-    required this.productRecord,
+    this.productRecord,
     super.key
   });
 
@@ -54,21 +54,18 @@ class _DetailPageState extends State<DetailPage> {
           },
           child: Scaffold(
             appBar: customAppBar(context,
-                title: "Tambah Barang",
+                title: "${widget?.productRecord?.id == null ? "Tambah" : "Ubah"} Barang",
                 centerTitle: true,
             ),
-            body: Container(
-              child: Skeleton(
-                isLoading: isLoading,
-                skeleton: SkeletonListView(
-                  itemCount: 4,
-                  scrollable: false,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                  // child: Text("A"),
-                  child: DetailForm()
-                ),
+            body: Skeleton(
+              isLoading: isLoading,
+              skeleton: SkeletonListView(
+                itemCount: 4,
+                scrollable: false,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                child: DetailForm(record: widget?.productRecord,)
               ),
             ),
           ),

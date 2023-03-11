@@ -81,7 +81,7 @@ class ContentViewState extends State<ContentView> with TickerProviderStateMixin 
 
   Future<void> _insertSingleItem() async {
     await setIsLoading(false);
-    var item = product(id: "a", isActive: true, createdAt: DateTime.now(), organizationName: "Jireh Laundry", name: "AKU BARU", product_category_name: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.");
+    var item = product(id: "a", product_category_id: "", isActive: true, createdAt: DateTime.now(), organizationName: "Jireh Laundry", name: "AKU BARU", product_category_name: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.");
     int insertIndex = totalData;
     _data?.insert(insertIndex, item);
     //_listKey.currentState!.insertItem(insertIndex);

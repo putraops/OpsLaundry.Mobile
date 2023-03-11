@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_apps/components/CustomAppBar.dart';
-import 'package:mobile_apps/components/AppBarBottomSheetAction.dart';
 import 'package:mobile_apps/components/NoData.dart';
 import 'package:mobile_apps/models/product.dart';
 import 'package:mobile_apps/helper/FilterRequest.dart';
@@ -8,6 +7,7 @@ import 'package:mobile_apps/pages/master_data/product/DetailPage.dart';
 import 'package:mobile_apps/pages/master_data/product/components/ContentView.dart';
 import 'package:mobile_apps/pages/master_data/product/components/FilterBar.dart';
 import 'package:mobile_apps/navigation/AnimateNavigation.dart';
+import 'package:mobile_apps/constants/color.dart' as color;
 
 import 'package:mobile_apps/redux/appState.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -72,7 +72,7 @@ class _ProductPageState extends State<ProductPage> with TickerProviderStateMixin
   }
   
   Future<product> onInsert() async{
-    var item = product(id: "a", isActive: true, createdAt: DateTime.now(), organizationName: "Jireh Laundry", name: "Newest", product_category_name: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.");
+    var item = product(id: "a", product_category_id: "", isActive: true, createdAt: DateTime.now(), organizationName: "Jireh Laundry", name: "Newest", product_category_name: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.");
     return item;
   }
 
@@ -84,17 +84,26 @@ class _ProductPageState extends State<ProductPage> with TickerProviderStateMixin
         title: "Barang",
         centerTitle: true,
         actions: [
-          IconButton(
-            color: const Color.fromRGBO(1, 1, 1, 0.75),
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            icon: const Icon(Icons.add, size: 30),
-            tooltip: "Tambah Barang",
-            onPressed: () {
-              Navigator.of(context).push(AnimateNavigation(DetailPage(productRecord: product(id: ""),)));
-            },
+          Center(
+            child: SizedBox(
+              height: 25,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: color.primary,
+                    padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(2.5)),
+                    ),
+                    elevation: 0
+                ),
+                child: const Text('Tambah', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600,)),
+                onPressed: () {
+                  Navigator.of(context).push(AnimateNavigation(const DetailPage(),));
+                },
+              ),
+            ),
           ),
-          const SizedBox(width: 5,),
+          const SizedBox(width: 15,),
         ]
       ),
       body: StoreConnector<AppState, AppState>(
