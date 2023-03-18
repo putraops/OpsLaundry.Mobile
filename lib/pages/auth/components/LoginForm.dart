@@ -106,12 +106,12 @@ class _LoginFormState extends State<LoginForm> {
                 color: Colors.white,
                 strokeWidth: 3,
               ),
-            ) : const Icon(null),
+            ) : const SizedBox(width: 0, child: Icon(null),),
             label: Text(isDisabled ? (isVerifying ? "Sedang verifikasi..." : "Silahkan tunggu...") : "Login",
                 style: const TextStyle(
                     color: Color.fromRGBO(255, 255, 255, 1),
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w900,
                     letterSpacing: -.25
                 )
             ),
