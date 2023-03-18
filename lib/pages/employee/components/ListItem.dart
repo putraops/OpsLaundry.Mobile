@@ -80,7 +80,7 @@ class _ListItemState extends State<ListItem> {
               ),
             ],
           ),
-          if (user.isSuperAdmin ?? false == true) isAdmin()
+          if (user.isSystemAdmin ?? false == true) isAdmin()
         ],
       ),
     );

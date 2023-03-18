@@ -4,8 +4,8 @@ import 'package:mobile_apps/components/CustomSnackBar.dart' as snackBar;
 
 class Api {
   final dio = createDio();
-  static const String baseUrl = "http://192.168.1.2:10000/api";
-  // static const String baseUrl = "https://8905-2001-448a-2040-1a3e-500d-926a-1852-de4.ngrok.io/api";
+  // static const String baseUrl = "http://192.168.1.5:3000/api";
+  static const String baseUrl = "https://dc6d-180-244-58-142.ap.ngrok.io/api";
   final tokenDio = Dio(BaseOptions(baseUrl: baseUrl));
 
   Api._internal();
@@ -36,7 +36,7 @@ class AppInterceptors extends Interceptor {
   AppInterceptors(this.dio);
 
   @override
-  void onRequest( RequestOptions options, RequestInterceptorHandler handler) async {
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
     var accessToken = "";
     options.headers['Authorization'] = 'Bearer $accessToken';
 
@@ -49,12 +49,16 @@ class AppInterceptors extends Interceptor {
       case DioErrorType.connectTimeout:
       case DioErrorType.sendTimeout:
       case DioErrorType.receiveTimeout:
-        snackBar.error("Ooops!!", NoInternetConnectionException(err.requestOptions).toString());
+        snackBar.error("Ooops!!", NoInternetConnectionException(err.requestOptions).toString(), durationSeconds: 2.5);
         throw DeadlineExceededException(err.requestOptions);
       case DioErrorType.response:
         switch (err.response?.statusCode) {
           case 400:
-            throw BadRequestException(err.requestOptions);
+            if (err.requestOptions.path == "/auth/login") {
+              throw err;
+            } else {
+              throw BadRequestException(err.requestOptions);
+            }
           case 401:
             throw UnauthorizedException(err.requestOptions);
           case 404:
@@ -63,6 +67,12 @@ class AppInterceptors extends Interceptor {
             throw ConflictException(err.requestOptions);
           case 500:
             throw InternalServerErrorException(err.requestOptions);
+          case 502:
+            snackBar.error(BadGatewayException(err.requestOptions).toString(), "Please contact the administrator.", durationSeconds: 4);
+            break;
+          default:
+            snackBar.error("Something went wrong!", "Please contact the administrator.", durationSeconds: 4);
+            break;
         }
         break;
       case DioErrorType.cancel:
@@ -89,6 +99,15 @@ class InternalServerErrorException extends DioError {
   @override
   String toString() {
     return 'Unknown error occurred, please try again later.';
+  }
+}
+
+class BadGatewayException extends DioError {
+  BadGatewayException(RequestOptions r) : super(requestOptions: r);
+
+  @override
+  String toString() {
+    return 'Bad Gateway!';
   }
 }
 

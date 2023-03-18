@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import '../context/GlobalContext.dart';
 
-void error(String title, String message, {int? durationSeconds = 0}) {
+int calculate(double durationSeconds) {
+  return (durationSeconds * 1000).round();
+}
+
+void error(String title, String message, {double? durationSeconds = 4}) {
   ScaffoldMessenger.of(NavigationService.navigatorKey.currentContext!).showSnackBar(
     SnackBar(
       behavior: SnackBarBehavior.floating,
       backgroundColor: Colors.transparent,
       padding: const EdgeInsets.all(0),
-      duration: Duration(seconds: durationSeconds == null || durationSeconds! == 0 ? 4 : durationSeconds!),
+      duration: Duration(milliseconds: calculate(durationSeconds!)),
       elevation: 0,
       content: Container(
         padding: const EdgeInsets.all(0),
@@ -25,12 +29,12 @@ void error(String title, String message, {int? durationSeconds = 0}) {
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: Colors.white),
+                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.white),
                   ),
                   const SizedBox(height: 7.5,),
                   Text(
                     message,
-                    style: const TextStyle( color: Colors.white, fontSize: 14, letterSpacing: 0 ),
+                    style: const TextStyle( color: Colors.white, fontSize: 13, letterSpacing: -.15),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),

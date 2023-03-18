@@ -132,7 +132,7 @@ class _ListItemState extends State<ListItem> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (state.auth.user!.isSuperAdmin! || state.auth.user!.isAdmin!) recordStatus(record),
+                  if (state.auth.user!.isSystemAdmin! || state.auth.user!.isAdmin!) recordStatus(record),
 
                   Text(
                     record.name ?? "",

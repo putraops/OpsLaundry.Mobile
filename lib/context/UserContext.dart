@@ -14,20 +14,17 @@ class UserContext {
   factory UserContext() => UserContext._internal();
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
-  Future<application_user?> setUserAsync(dynamic value) async {
-    application_user? user;
+  Future<application_user?> setUserAsync(application_user? value) async {
     try{
       final SharedPreferences prefs = await _prefs;
       if (value == null) return null;
-      user = application_user.fromJson(value);
-      prefs.setString("storedUser", jsonEncode(user!));
-
-      //var temp = user!;
-      await setLogin(user);
+      prefs.setString("storedUser", jsonEncode(value!));
+      await setLogin(value);
     } catch (e) {
+      print(e);
       snackBar.error("Terjadi Kesalahan!", e.toString());
     }
-    return user;
+    return value;
   }
 
   Future<application_user?> getUserAsync() async {

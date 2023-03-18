@@ -30,7 +30,7 @@ class application_user {
   int? totalPoint;
   bool? isEmailVerified;
   bool? isPhoneVerified;
-  bool? isSuperAdmin;
+  bool? isSystemAdmin;
   bool? isAdmin;
   int userType = 0;
   bool? gender;
@@ -76,7 +76,7 @@ class application_user {
     this.totalPoint,
     this.isEmailVerified,
     this.isPhoneVerified,
-    this.isSuperAdmin,
+    this.isSystemAdmin,
     this.isAdmin,
     this.userType = 0,
     this.gender,
@@ -123,7 +123,7 @@ class application_user {
     totalPoint = json['total_point'];
     isEmailVerified = json['is_email_verified'];
     isPhoneVerified = json['is_phone_verified'];
-    isSuperAdmin = json['is_super_admin'];
+    isSystemAdmin = json['is_system_admin'];
     isAdmin = json['is_admin'];
     userType = json['user_type'] ?? 0;
     gender = json['gender'];
@@ -173,7 +173,7 @@ Map<String, dynamic> _$ObjectToJson(application_user instance) => <String, dynam
   'total_point' : instance.totalPoint,
   'is_email_verified' : instance.isEmailVerified,
   'is_phone_verified' : instance.isPhoneVerified,
-  'is_super_admin' : instance.isSuperAdmin,
+  'is_system_admin' : instance.isSystemAdmin,
   'is_admin' : instance.isAdmin,
   'user_type' : instance.userType,
   'gender' : instance.gender,

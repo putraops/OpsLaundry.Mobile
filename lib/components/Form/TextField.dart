@@ -356,7 +356,8 @@ class CustomTextFormField extends StatefulWidget {
     this.value
   });
 
-  @override  CustomTextFormFieldState createState() {
+  @override
+  CustomTextFormFieldState createState() {
     // ignore: no_logic_in_create_state
     return CustomTextFormFieldState(value);
   }
