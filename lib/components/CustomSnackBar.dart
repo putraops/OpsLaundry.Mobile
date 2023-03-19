@@ -29,12 +29,12 @@ void error(String title, String message, {double? durationSeconds = 4}) {
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.white),
+                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: Colors.white),
                   ),
                   const SizedBox(height: 7.5,),
                   Text(
                     message,
-                    style: const TextStyle( color: Colors.white, fontSize: 13, letterSpacing: -.15),
+                    style: const TextStyle( color: Colors.white, fontSize: 15, letterSpacing: -.15,),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),

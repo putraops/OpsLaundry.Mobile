@@ -7,13 +7,11 @@ import 'ListItem.dart';
 
 class ContentView extends StatefulWidget {
   final List<service_type> items;
-  // final Future<service_type> Function() onInsert;
   final Future<void> Function(bool value) setIsLoading;
 
   const ContentView({
     super.key,
     required this.items,
-    // required this.onInsert,
     required this.setIsLoading,
   });
 
@@ -24,7 +22,7 @@ class ContentView extends StatefulWidget {
 }
 
 class ContentViewState extends State<ContentView> with TickerProviderStateMixin {
-  late final GlobalKey<AnimatedListState> _listKey; // backing data
+  late final GlobalKey<AnimatedListState> _listKey;
   late final Tween<Offset>? _animatedTween;
   late ScrollController _controller;
   late List<service_type> _data;
@@ -59,9 +57,9 @@ class ContentViewState extends State<ContentView> with TickerProviderStateMixin 
   @protected
   void didUpdateWidget(covariant ContentView oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _listKey = GlobalKey();
+    //_listKey = GlobalKey();
     setState(() {
-      _data = widget.items;
+      _data = widget.items!;
       totalData = _data.length;
     });
   }
@@ -71,12 +69,7 @@ class ContentViewState extends State<ContentView> with TickerProviderStateMixin 
   }
 
   Future<void> _scrollListener() async {
-    // print(_controller.position.extentAfter);
-    //print(isLoading);
     if (_controller.position.extentAfter < 5) {
-      // print("asdasd");
-      // await _insertSingleItem();
-      // await setIsLoading(true);
     }
   }
 

@@ -1,6 +1,10 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_apps/components/CustomAppBar.dart';
 import 'package:mobile_apps/components/NoData.dart';
+import 'package:mobile_apps/config/Api.dart';
 import 'package:mobile_apps/models/product_category.dart';
 import 'package:mobile_apps/helper/FilterRequest.dart';
 import 'package:mobile_apps/models/service_type.dart';
@@ -9,7 +13,6 @@ import 'package:mobile_apps/pages/master_data/service_type/components/ContentVie
 import 'package:mobile_apps/redux/appState.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:skeletons/skeletons.dart';
-import 'dart:convert';
 
 import 'package:mobile_apps/data/dummies.dart';
 
@@ -20,40 +23,40 @@ class ServiceTypePage extends StatefulWidget {
   State<ServiceTypePage> createState() => _ServiceTypePageState();
 }
 
-class _ServiceTypePageState extends State<ServiceTypePage> with TickerProviderStateMixin {
-  late List<service_type> data = [];
+class _ServiceTypePageState extends State<ServiceTypePage> {
+  late List<service_type> data = <service_type>[];
   bool isLoading = true;
-  late FilterRequest filterRequest;
-  late double filterPage;
-  late double pageHeight;
+  late FilterRequest filterRequest = FilterRequest();
+  late double filterPage = 180;
+  late double pageHeight = 50;
 
   @override
   initState() {
+    getAll();
     super.initState();
-    filterRequest = FilterRequest();
-    data = serviceTypeDummies;
-    filterPage = 180;
-    pageHeight = filterPage + 50;
-    initialization();
   }
 
   @override
   void dispose() {
-    //data = [];
+    data = [];
     super.dispose();
   }
 
-  void initialization() async {
-    await Future.delayed(const Duration(seconds: 1), () async { await setIsLoading(false); },);
+  Future<void> getAll() async {
+    try {
+      var response = await Api().dio.get('/service_type/getAll');
+      setState(() => {
+        data = (response.data as List<dynamic>).map((i) => service_type.fromJson(i)).toList(),
+      });
+      await setIsLoading(false);
+    } on DioError catch (e)  {
+      await setIsLoading(false);
+      rethrow;
+    }
   }
 
   Future<void> setIsLoading(bool value) async {
     setState(() { isLoading = value; });
-  }
-
-  Future<product_category> onInsert() async{
-    var item = product_category(id: "a", isActive: true, createdAt: DateTime.now(), organizationName: "Jireh Laundry", name: "Newest", description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.");
-    return item;
   }
 
   @override

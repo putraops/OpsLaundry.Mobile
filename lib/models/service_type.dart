@@ -1,5 +1,9 @@
 // ignore: depend_on_referenced_packages
+import 'dart:convert';
+
 import 'package:json_annotation/json_annotation.dart';
+
+List<service_type> jsonToList(String str) => List<service_type>.from(json.decode(str).map((x) => service_type.fromJson(x)));
 
 // ignore_for_file: camel_case_types
 @JsonSerializable()
@@ -82,6 +86,8 @@ class service_type {
 
   Map<String, dynamic> toJson() => _$ObjectToJson(this);
 }
+
+
 
 Map<String, dynamic> _$ObjectToJson(service_type instance) => <String, dynamic>{
   'id' : instance.id,

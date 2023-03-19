@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:mobile_apps/pages/auth/LoginPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mobile_apps/models/application_user.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -45,6 +47,24 @@ class UserContext {
     return userContext;
   }
 
+  Future<String?> getToken() async {
+    application_user userContext;
+    final SharedPreferences prefs = await _prefs;
+
+    try {
+      String? jsonString = prefs.getString("storedUser");
+      if (jsonString == null) return null;
+
+      Map<String, dynamic> user = jsonDecode(jsonString.toString());
+      userContext = application_user.fromJson(user);
+
+    } catch (e) {
+      print(e);
+      return null;
+    }
+    return userContext.token;
+  }
+
   Future<application_user?> invokeUser() async {
     application_user userContext;
     final SharedPreferences prefs = await _prefs;
@@ -68,5 +88,16 @@ class UserContext {
     final store = StoreProvider.of<AppState>(NavigationService.navigatorKey.currentContext!);
     store.dispatch(SetLogin(LoginState(isLogin: true, token: user.token!, user: user)));
     // store.dispatch(SetUser(user!));
+  }
+
+  Future<void> setLogout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('storedUser');
+
+    var context = NavigationService.navigatorKey.currentContext!;
+    await Navigator.of(context).pushAndRemoveUntil(
+       MaterialPageRoute(
+           builder: (BuildContext context) => const LoginPage()),
+           (Route route) => route == null);
   }
 }

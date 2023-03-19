@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
+import 'package:mobile_apps/commons/ErrorResponse.dart';
 // ignore: library_prefixes
 import 'package:mobile_apps/components/CustomSnackBar.dart' as snackBar;
+import 'package:mobile_apps/context/UserContext.dart';
 
 class Api {
   final dio = createDio();
@@ -37,8 +39,8 @@ class AppInterceptors extends Interceptor {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
-    var accessToken = "";
-    options.headers['Authorization'] = 'Bearer $accessToken';
+    var accessToken = await UserContext().getToken();
+    options.headers['Authorization'] = accessToken;
 
     return handler.next(options);
   }
@@ -60,7 +62,13 @@ class AppInterceptors extends Interceptor {
               throw BadRequestException(err.requestOptions);
             }
           case 401:
-            throw UnauthorizedException(err.requestOptions);
+            try {
+              var errResponse = ErrorResponse.fromJson(err.response?.data as Map<String, dynamic>);
+              snackBar.error(errResponse.error, "Silahkan login Kembali!");
+            } on Exception catch(e) {
+              snackBar.error("Ooops!!", e.toString());
+            }
+            throw UserContext().setLogout();
           case 404:
             throw NotFoundException(err.requestOptions);
           case 409:
@@ -68,10 +76,10 @@ class AppInterceptors extends Interceptor {
           case 500:
             throw InternalServerErrorException(err.requestOptions);
           case 502:
-            snackBar.error(BadGatewayException(err.requestOptions).toString(), "Please contact the administrator.", durationSeconds: 4);
+            snackBar.error(BadGatewayException(err.requestOptions).toString(), "Please contact the Administrator.", durationSeconds: 4);
             break;
           default:
-            snackBar.error("Something went wrong!", "Please contact the administrator.", durationSeconds: 4);
+            snackBar.error("Something went wrong!", "Please contact the Administrator...", durationSeconds: 4);
             break;
         }
         break;
