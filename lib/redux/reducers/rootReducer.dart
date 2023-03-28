@@ -6,17 +6,18 @@ import 'package:mobile_apps/redux/actions.dart';
 
 import '../appState.dart';
 
-final authReducer = TypedReducer<LoginState, SetLogin>(_setLogin);
-final userReducer = TypedReducer<application_user, SetUser>(_setUser);
+// final authReducer = TypedReducer<UserState, SetLogin>(_setLogin);
+// final userReducer = TypedReducer<application_user, SetUser>(_setUser);
+// final getUserReducer = TypedReducer((UserState, action) => _getUser);
 
-LoginState _setLogin(LoginState value, SetLogin action) {
-  return action.value;
-}
+// UserState _setLogin(UserState value, SetLogin action) {
+//   return action.value;
+// }
 
-application_user _getUser(LoginState value) {
-  return value!.user!;
-}
-
-application_user _setUser(application_user value, SetUser action) {
-  return action.value;
-}
+// application_user _getUser(application_user value, GetUser action) {
+//   return value;
+// }
+//
+// application_user _setUser(application_user value, SetUser action) {
+//   return action.value;
+// }

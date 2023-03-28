@@ -1,26 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_apps/models/application_user.dart';
 import 'package:mobile_apps/models/product_category.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:mobile_apps/components/CustomAlertDialog.dart';
-import 'package:mobile_apps/helper/ActiveStatus.dart';
+import 'package:mobile_apps/constants/ActiveStatus.dart';
 import 'package:mobile_apps/constants/color.dart' as color;
-import 'package:mobile_apps/navigation/AnimateNavigation.dart';
-import 'package:mobile_apps/pages/master_data/product_category/ProductDetailPage.dart';
-
 import 'package:mobile_apps/redux/appState.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:redux/redux.dart';
 
 class ListItem extends StatefulWidget {
-  final product_category record;
+  final product_category data;
   final int index;
-  final Function(String, int)? onDelete;
-  final bool? outletFilter;
 
   const ListItem({
-    required this.record,
+    required this.data,
     required this.index,
-    this.onDelete,
-    this.outletFilter,
     super.key
   });
 
@@ -29,12 +22,12 @@ class ListItem extends StatefulWidget {
 }
 
 class _ListItemState extends State<ListItem> {
-  late product_category record;
+  product_category get data => widget.data;
+  int get index => widget.index;
 
   @override
   initState() {
     super.initState();
-    record = widget.record!;
   }
 
   @override
@@ -42,116 +35,80 @@ class _ListItemState extends State<ListItem> {
     super.dispose();
   }
 
-  void deleteById(String id) async {
-    await widget.onDelete!(id, widget.index!);
-  }
-
-  Widget recordStatus(product_category record) {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            (
-              widget.outletFilter == false ?
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 2.5),
-                color: color.secondaryBackgroundColor,
-                child: Text(record.organizationName!,
-                  style: const TextStyle(fontSize: 12,
-                      color: color.defaultTextColor,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: -.25),
-                ),
-              ) : Container()
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 2.5),
-              color: record.isActive! ? color.successBackgroundColor : color.primaryBackgroundColor, //color.selectedBackgroundColor,
-              child: Text(getStatusNameByStatus(record.isActive!),
-                style: TextStyle(fontSize: 12,
-                    color: record.isActive! ? color.success : color.primary,
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: -.25),
-              ),
-            ),
-          ],
-        ),
-
-        const SizedBox(height: 7.5,),
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    // 30 outer margin; 30 inner padding; 50 size of AvatarCircle; 15 size of SizedBox
-    double titleBoxSize = MediaQuery.of(context).size.width - 30;
-    double descriptionBoxSize = MediaQuery.of(context).size.width - 30;
-
-    return StoreConnector<AppState, AppState>(
-      converter: (store) => store.state,
-      builder: (_, state) {
-        return Slidable(
-            enabled: true,
-            // key: ValueKey(widget.index),
-            key: ValueKey(widget.record.id),
-            endActionPane: ActionPane(
-              motion: const DrawerMotion(),
-              extentRatio: 0.6,
-              children: [
-                SlidableAction(
-                  onPressed: (BuildContext context){
-                    Navigator.of(context).push(AnimateNavigation(ProductDetailPage(record: widget.record,)));
-                  },
-                  backgroundColor: const Color(0xFF21B7CA),
-                  foregroundColor: Colors.white,
-                  icon: Icons.edit_outlined,
-                  label: 'Ubah',
-                ),
-                SlidableAction(
-                  onPressed: (BuildContext context){
-                    confirmDialog(
-                        callback: (value) => {
-                          if (value) deleteById(record.id!),
-                        },
-                        confirmButtonText: "Hapus",
-                        cancelButtonText: "Batal", hasCancelButton: true, reverse: true
-                    );
-                  },
-                  backgroundColor: color.primary,
-                  foregroundColor: Colors.white,
-                  icon: Icons.delete,
-                  label: 'Hapus',
-                ),
-              ],
-            ),
-            child: Container(
-              color: Colors.white,
-              padding: const EdgeInsets.all(15),
-              child: Column(
+    return StoreConnector<AppState, PageState>(
+      converter: PageState.fromState,
+      builder: (_, PageState state) {
+        return Container(
+          color: Colors.white,
+          padding: const EdgeInsets.all(15),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (state.auth.user!.isSystemAdmin! || state.auth.user!.isAdmin!) recordStatus(record),
-
-                  Text(
-                    record.name ?? "",
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600, letterSpacing: -.25),
-                  ),
-                  const SizedBox(height: 5,),
-                  Text(
-                      record.description ?? "",
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width - 90 - 30,
+                    child: Text(
+                      data.name ?? "",
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 13, color: Color.fromRGBO(1, 1, 1, 0.8),)
+                      style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600, letterSpacing: -.25),
+                    ),
+                  ),
+                  if (state.user!.isSystemAdmin! || state.user!.isAdmin!) (
+                    Container(
+                      width: 90,
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      color: data.isActive! ? color.successBackgroundColor : color.primaryBackgroundColor,
+                      child: Center(
+                        child: Text(getStatusNameByStatus(data.isActive!),
+                          style: TextStyle(fontSize: 13,
+                              color: data.isActive! ? color.success : color.primary,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: -.25),
+                        ),
+                      ),
+                    )
                   )
                 ],
               ),
-            )
+
+              if (data.description != null && data.description != "") (
+              // if (true) (
+                Column(
+                  children: [
+                    const SizedBox(height: 7.5,),
+                    Text(
+                      data.description ?? "",
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontSize: 13, color: Color.fromRGBO(1, 1, 1, 0.8),)
+                    )
+                  ],
+                )
+              )
+            ],
+          ),
         );
       },
+    );
+  }
+}
+
+class PageState {
+  final application_user? user;
+
+  PageState({
+    this.user,
+  });
+
+  static PageState fromState(Store<AppState> store) {
+    return PageState(
+        user: store.state.user,
     );
   }
 }

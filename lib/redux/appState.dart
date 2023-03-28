@@ -1,41 +1,124 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 import 'package:mobile_apps/models/application_user.dart';
+import 'package:mobile_apps/models/pagination/DataTablesResponse.dart';
 
-@immutable
 class AppState {
-  final LoginState auth;
+  dynamic user;
+  bool? isLogin;
+  bool? isVerifying;
+  bool? loading;
+  String? errorMessage;
+  final DataTablesResponse? datatable;
+  final dynamic object;
+  bool? hasUpdate;
 
-  const AppState({
-    required this.auth,
+  AppState({
+    this.user,
+    this.isLogin = false,
+    this.isVerifying = false,
+    this.loading = false,
+    this.errorMessage,
+    this.datatable,
+    this.object,
+    this.hasUpdate = false,
   });
 
-  factory AppState.initial() => AppState(auth: LoginState.initial());
+  factory AppState.initial() => AppState();
 
-  AppState copyWith({required LoginState auth,}) {
+  AppState copyWith({
+    dynamic user,
+    bool? isLogin,
+    bool? isVerifying,
+    bool? loading,
+    String? errorMessage,
+    DataTablesResponse? datatable,
+    dynamic object,
+    bool? hasUpdate,
+  }) {
     return AppState(
-      auth : auth
+      user: user ?? this.user,
+      isLogin: isLogin ?? this.isLogin,
+      isVerifying: isVerifying ?? this.isVerifying,
+      loading: loading ?? this.loading,
+      errorMessage: errorMessage,
+      datatable: datatable,
+      object: object,
+      hasUpdate: hasUpdate,
     );
   }
 
-  @override
-  String toString() {
-    return 'AppState: {}';
+  static AppState? fromJson(dynamic json) {
+    if (json == null) {
+      return null;
+    }
+    return AppState(
+      user: json['user'] is application_user ? json['user'] : application_user.fromJson((jsonDecode(jsonEncode(json['user'])))),
+      isLogin: json['isLogin'] as bool?,
+      isVerifying: json['isVerifying'] as bool?,
+      loading: json['loading'] as bool?,
+      errorMessage: json['errorMessage'] as String?,
+    );
   }
+
+  Map<String, dynamic> toJson() => <String, dynamic>{
+    'user': user,
+    'isLogin': isLogin,
+  };
 }
 
-class LoginState {
-  bool isLogin;
-  String token;
-  final application_user? user;
 
-  LoginState({
-    required this.isLogin,
-    required this.token,
-    this.user
-  });
 
-  factory LoginState.initial() => LoginState(
-    isLogin: false,
-    token: "",
-  );
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// class UserState {
+//   bool canDelete;
+//   String token;
+//   final application_user? user;
+//
+//   UserState({
+//     required this.canDelete,
+//     required this.token,
+//     this.user
+//   });
+//
+//   factory UserState.initial() => UserState(
+//     canDelete: false,
+//     token: "",
+//   );
+// }
+//
+// class AuthState {
+//   bool isLogin;
+//   bool isVerifying;
+//   bool isVerified;
+//
+//   AuthState({
+//     this.isLogin = false,
+//     required this.isVerifying,
+//     this.isVerified = false,
+//   });
+//
+//   factory AuthState.initial() => AuthState(
+//     isLogin: false,
+//     isVerifying: true,
+//     isVerified: false,
+//   );
+// }

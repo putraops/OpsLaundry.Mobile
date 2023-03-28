@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 
 class NoData extends StatelessWidget {
-  // final double? subtractHeight;
   const NoData({
     super.key,
-    // this.subtractHeight = 0,
   });
 
   @override

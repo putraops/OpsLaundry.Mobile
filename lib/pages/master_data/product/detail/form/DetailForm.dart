@@ -198,7 +198,6 @@ class _DetailFormState extends State<DetailForm> {
       try {
         // StandardResult result = await AuthService().login(_auth);
         if (true) {
-        //   setState(() { isVerifying = true; });
         //   var user = await UserContext().setUserAsync(result.data);
         //   if (user != null) {
         //     Future.delayed(const Duration(seconds: 2), () {
@@ -207,11 +206,10 @@ class _DetailFormState extends State<DetailForm> {
         //     });
         //   }
         } else {
-          // snackBar.error("Login Gagal!", result.message, durationSeconds: 2);
-          // setState(() { isDisabled = false; isVerifying = false;});
+          // AppSnackBar().error("Login Gagal!", result.message, durationSeconds: 2);
+
         }
       } on Exception catch (e) {
-        // setState(() { isDisabled = false; isVerifying = false;});
       }
     } else {
       //-- From Invalid, it must be some required fields are empty

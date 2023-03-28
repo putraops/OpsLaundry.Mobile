@@ -1,32 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_apps/components/CustomAppBar.dart';
-import 'package:mobile_apps/models/product_category.dart';
 import 'package:mobile_apps/pages/master_data/product_category/form/DetailForm.dart';
 import 'package:mobile_apps/redux/appState.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:skeletons/skeletons.dart';
 
-class ProductDetailPage extends StatefulWidget {
-  final product_category? record;
+class ProductCategoryDetailPage extends StatefulWidget {
+  static const route = "/product_category/detail";
+  final String? recordId;
 
-  const ProductDetailPage({
-    this.record,
+  const ProductCategoryDetailPage({
+    this.recordId,
     super.key
   });
 
   @override
-  State<ProductDetailPage> createState() => _ProductDetailPageState();
+  State<ProductCategoryDetailPage> createState() => _ProductCategoryDetailPageState();
 }
 
-class _ProductDetailPageState extends State<ProductDetailPage> {
+class _ProductCategoryDetailPageState extends State<ProductCategoryDetailPage> {
   bool isLoading = false;
 
   @override
   initState() {
     super.initState();
-    if (widget.record != null) {
-      initialization();
-    }
   }
 
   @override
@@ -34,26 +31,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     super.dispose();
   }
 
-  void initialization() async {
-    await setIsLoading(true);
-    await Future.delayed(const Duration(seconds: 1), () async { await setIsLoading(false); },);
-  }
-
-  Future<void> setIsLoading(bool value) async {
-    setState(() { isLoading = value; });
-  }
-
-  Future<product_category> onInsert() async{
-    var item = product_category(id: "a", isActive: true, createdAt: DateTime.now(), organizationName: "Jireh Laundry", name: "Newest", description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.");
-    return item;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: customAppBar(context,
-        title: "${widget.record == null ? "Tambah" : "Ubah"} Kategori",
+        title: "${widget.recordId == null ? "Tambah" : "Ubah"} Kategori",
         centerTitle: true,
         actions: [
           const SizedBox(width: 15,),
@@ -70,7 +53,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             ),
             child: Padding(
               padding: const EdgeInsets.all(15),
-              child: DetailForm(record: widget.record),
+              child: DetailForm(recordId: widget.recordId),
             ),
           );
         }

@@ -4,7 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 // ignore_for_file: camel_case_types
 @JsonSerializable()
 class product_category {
-  late String id;
+  String? id;
   bool? isActive = false;
   bool? isLocked;
   bool? isDefault;
@@ -29,7 +29,7 @@ class product_category {
   String? recordApproved;
 
   product_category({
-    required this.id,
+    this.id,
     this.isActive,
     this.isLocked,
     this.isDefault,
@@ -45,7 +45,7 @@ class product_category {
     this.organizationId,
     this.organizationName,
 
-    required this.name,
+    this.name,
     this.description,
 
     this.recordCreated,

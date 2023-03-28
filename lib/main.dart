@@ -1,8 +1,14 @@
+
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
+// import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:mobile_apps/context/UserContext.dart';
-import 'package:mobile_apps/redux/Store.dart';
+import 'package:mobile_apps/pages/master_data/product_category/ProductCategoryDetailPage.dart';
+import 'package:mobile_apps/pages/master_data/product_category/ProductCategoryPage.dart';
+import 'package:mobile_apps/redux/store.dart';
 import 'package:redux/redux.dart';
 import 'package:mobile_apps/pages/auth/LoginPage.dart';
 import 'package:mobile_apps/constants/color.dart' as color;
@@ -10,8 +16,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:mobile_apps/redux/appState.dart';
 
 import 'context/GlobalContext.dart';
-import 'navigation/NavigationBarController.dart';
-
+import 'navigation/MainNavigation.dart';
 void main() async {
   // SystemChrome.setSystemUIOverlayStyle(
   //     const SystemUiOverlayStyle(
@@ -23,15 +28,16 @@ void main() async {
   //     )
   // );
 
-  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  WidgetsFlutterBinding.ensureInitialized();
+  // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
+  var store = await AppStore().getStoreAsync();
   runApp(Main(store));
 }
 
 class Main extends StatefulWidget {
   final Store<AppState> store;
-  const Main(this.store,{ super.key });
+  const Main(this.store, {super.key});
 
   @override
   State<Main> createState() => _MainState();
@@ -47,13 +53,16 @@ class _MainState extends State<Main> {
   }
 
   void initialization() async {
-    if (!widget.store.state.auth.isLogin) {
-      var user = await UserContext().invokeUser();
-      if (user != null) setState(() { isLogin = true; });
-    }
+    print("storeLogin from main.dart: ${widget.store.state?.isLogin ?? false}");
+    // print("isLogin: $widget.store.");
 
-    await Future.delayed(const Duration(seconds: 1));
-    FlutterNativeSplash.remove();
+    // if (widget.store.state.authState?.isLogin ?? false) {
+    //   var user = await UserContext().invokeUser();
+    //   if (user != null) setState(() { isLogin = true; });
+    // }
+    //
+    // await Future.delayed(const Duration(seconds: 1));
+    // FlutterNativeSplash.remove();
   }
 
   @override
@@ -80,25 +89,23 @@ class _MainState extends State<Main> {
       statusBarBrightness: Brightness.dark, // For iOS (dark icons)
     ));
 
-
-
     return StoreProvider<AppState>(
       store: widget.store,
       child: MaterialApp(
         title: 'Ops Laundry',
         theme: ThemeData(
-          primaryColor: Colors.blue,
-          // brightness: Brightness.dark,
-          primarySwatch: materialColor,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-          fontFamily: "Poppins",
-          textSelectionTheme: const TextSelectionThemeData(
-            cursorColor: Colors.red,
-            selectionColor: Color.fromRGBO(250, 0, 0, 0.4),
-            selectionHandleColor: color.primary,
-          ),
-          elevatedButtonTheme: ElevatedButtonThemeData(
-            style: ElevatedButton.styleFrom(
+            primaryColor: Colors.blue,
+            // brightness: Brightness.dark,
+            primarySwatch: materialColor,
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+            fontFamily: "Poppins",
+            textSelectionTheme: const TextSelectionThemeData(
+              cursorColor: Colors.red,
+              selectionColor: Color.fromRGBO(250, 0, 0, 0.4),
+              selectionHandleColor: color.primary,
+            ),
+            elevatedButtonTheme: ElevatedButtonThemeData(
+                style: ElevatedButton.styleFrom(
               backgroundColor: color.primary,
               textStyle: const TextStyle(color: Colors.red),
               padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -109,9 +116,7 @@ class _MainState extends State<Main> {
               //primary: Colors.grey[300],
               // minimumSize: Size(88, 36),
               // minimumSize: Size(double.infinity, 45),
-            )
-          )
-        ),
+            ))),
         // theme: ThemeData.light(), // Provide light theme
         // darkTheme: ThemeData.dark(), // Provide dark theme
         // home: HomePage(),
@@ -126,89 +131,99 @@ class _MainState extends State<Main> {
         //   dark: myDarkTheme,
         //   child: isLogin ? const BottomNavigationBarController() : const LoginPage(),
         // ),
-        home: isLogin ? const BottomNavigationBarController() : const LoginPage(),
+        routes: {
+          MainNavigation.route: (route) => MainNavigation(widget.store),
+          ProductCategoryPage.route: (route) => const ProductCategoryPage(),
+          ProductCategoryDetailPage.route: (route) => const ProductCategoryDetailPage(),
+        },
+        initialRoute: MainNavigation.route,
+        //home: SplashScreen(widget.store),
+         //home: widget.store.state?.isLogin ?? false ? const BottomNavigationBarController() : const LoginPage(),
       ),
     );
   }
 }
 
-class MyThemeData {
-  late ThemeData themeData; // important!
-  final Color myCustomColor;
-  final CustomWidgetData customWidget;
-  MyThemeData({
-    required this.themeData,
-    required this.myCustomColor,
-    required this.customWidget,
-  });
-}
-
-class CustomWidgetData {
-  final Color backgroundColor;
-  final BoxShape shape;
-
-  CustomWidgetData({
-    required this.backgroundColor,
-    required this.shape,
-  });
-}
-
-class MyTheme extends StatelessWidget {
-  final MyThemeData light;
-  final MyThemeData dark;
-  final Widget child;
-  const MyTheme({
-    required this.light,
-    required this.dark,
-    required this.child,
-    Key? key,
-  }) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    final brightness = MediaQuery.of(context).platformBrightness;
-    final data = brightness == Brightness.light ? light : dark;
-
-    return InheritedMyTheme(
-      data: data,
-      child: Theme(
-        data: data.themeData,
-        child: child,
-      ),
-    );
-  }
-  static MyThemeData of(BuildContext context){
-    final theme = Theme.of(context);
-    return context
-        .dependOnInheritedWidgetOfExactType<InheritedMyTheme>()!
-        .data..themeData = theme;
-  }
-}
-
-class InheritedMyTheme extends InheritedWidget {
-  final MyThemeData data;
-  const InheritedMyTheme({
-    required this.data,
-    required Widget child,
-    Key? key,
-  }):super(key: key, child: child,);
-  @override
-  bool updateShouldNotify(covariant InheritedWidget oldWidget) =>
-      oldWidget != this;
-}
-
-final myLightTheme = MyThemeData(
-  themeData: ThemeData.light(),
-  myCustomColor: Colors.lightBlue,
-  customWidget: CustomWidgetData(
-    backgroundColor: Colors.lightGreen,
-    shape: BoxShape.circle,
-  ),
-);
-final myDarkTheme = MyThemeData(
-  themeData: ThemeData.dark(),
-  myCustomColor: Colors.blue,
-  customWidget: CustomWidgetData(
-    backgroundColor: Colors.green,
-    shape: BoxShape.circle,
-  ),
-);
+// class MyThemeData {
+//   late ThemeData themeData; // important!
+//   final Color myCustomColor;
+//   final CustomWidgetData customWidget;
+//   MyThemeData({
+//     required this.themeData,
+//     required this.myCustomColor,
+//     required this.customWidget,
+//   });
+// }
+//
+// class CustomWidgetData {
+//   final Color backgroundColor;
+//   final BoxShape shape;
+//
+//   CustomWidgetData({
+//     required this.backgroundColor,
+//     required this.shape,
+//   });
+// }
+//
+// class MyTheme extends StatelessWidget {
+//   final MyThemeData light;
+//   final MyThemeData dark;
+//   final Widget child;
+//   const MyTheme({
+//     required this.light,
+//     required this.dark,
+//     required this.child,
+//     Key? key,
+//   }) : super(key: key);
+//   @override
+//   Widget build(BuildContext context) {
+//     final brightness = MediaQuery.of(context).platformBrightness;
+//     final data = brightness == Brightness.light ? light : dark;
+//
+//     return InheritedMyTheme(
+//       data: data,
+//       child: Theme(
+//         data: data.themeData,
+//         child: child,
+//       ),
+//     );
+//   }
+//
+//   static MyThemeData of(BuildContext context) {
+//     final theme = Theme.of(context);
+//     return context.dependOnInheritedWidgetOfExactType<InheritedMyTheme>()!.data
+//       ..themeData = theme;
+//   }
+// }
+//
+// class InheritedMyTheme extends InheritedWidget {
+//   final MyThemeData data;
+//   const InheritedMyTheme({
+//     required this.data,
+//     required Widget child,
+//     Key? key,
+//   }) : super(
+//           key: key,
+//           child: child,
+//         );
+//   @override
+//   bool updateShouldNotify(covariant InheritedWidget oldWidget) =>
+//       oldWidget != this;
+// }
+//
+// final myLightTheme = MyThemeData(
+//   themeData: ThemeData.light(),
+//   myCustomColor: Colors.lightBlue,
+//   customWidget: CustomWidgetData(
+//     backgroundColor: Colors.lightGreen,
+//     shape: BoxShape.circle,
+//   ),
+// );
+// final myDarkTheme = MyThemeData(
+//   themeData: ThemeData.dark(),
+//   myCustomColor: Colors.blue,
+//   customWidget: CustomWidgetData(
+//     backgroundColor: Colors.green,
+//     shape: BoxShape.circle,
+//   ),
+// );

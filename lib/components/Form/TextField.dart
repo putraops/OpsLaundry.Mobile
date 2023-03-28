@@ -311,6 +311,7 @@ class _TextInputState extends State<ClearableTextInput> {
 class CustomTextFormField extends StatefulWidget {
   final Function(String?)? onSaved;
   final void Function()? onChange;
+  final Function(String)? onChangeCallback;
   final String? hintText;
   final String? labelText;
   final TextStyle? style;
@@ -336,6 +337,7 @@ class CustomTextFormField extends StatefulWidget {
     super.key,
     this.onSaved,
     this.onChange,
+    this.onChangeCallback,
     this.hintText,
     this.labelText,
     this.errorText,
@@ -390,10 +392,13 @@ class CustomTextFormFieldState extends State<CustomTextFormField> {
         }
         return null;
       },
-      onChanged: (String value) => setState(() {
-        touched = isNotEmpty(value);
-        widget.onChange;
-      }),
+      onChanged: (String value) => {
+        widget.onChangeCallback == null ? null : widget.onChangeCallback!(value),
+        setState(() {
+          touched = isNotEmpty(value);
+          widget.onChange;
+        })
+      },
       enabled: !widget.disabled!,
       onSaved: widget.onSaved,
       textAlign: widget.textAlign ?? TextAlign.start,

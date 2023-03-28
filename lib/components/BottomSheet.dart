@@ -99,8 +99,8 @@ void bottomSheet(context, String title, Widget widget,
         behavior: HitTestBehavior.deferToChild,
         child: DraggableScrollableSheet(
           expand: false,
-          initialChildSize: isFullSize ?? false ? 0.94 : (size ?? 0.5), // half screen on load
-          maxChildSize: 0.94,       // full screen on scroll
+          initialChildSize: isFullSize ?? false ? 0.97 : (size ?? 0.5), // half screen on load
+          maxChildSize: 0.97,       // full screen on scroll
           minChildSize: dismissSize ?? 0.3,
           builder: (BuildContext context, ScrollController scrollController) {
             return Stack(
@@ -199,7 +199,7 @@ Widget bottomSheetAction(BuildContext context, double actionHeight) {
               ),
               elevation: 0
           ),
-          child: const Text('Tampilkan', style: TextStyle(color: Colors.white, fontSize: 14,)),
+          child: const Text('Tampilkan', style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w900)),
           onPressed: () {
           },
         ),

@@ -31,7 +31,6 @@ class ContentViewState extends State<ContentView> with TickerProviderStateMixin 
   late int totalData;
   late bool isLoading;
 
-
   @override
   initState() {
     super.initState();

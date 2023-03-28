@@ -50,7 +50,7 @@ class application_user {
   String? recordUpdated;
 
   application_user({
-    required this.id,
+    this.id,
     this.isActive,
     this.isLocked,
     this.isDefault,
@@ -144,7 +144,18 @@ class application_user {
   }
 
   Map<String, dynamic> toJson() => _$ObjectToJson(this);
+
+  // application_user invoke(dynamic user) => await invoke(user);
+
 }
+
+// Future<application_user> invoke (dynamic user) async {
+//   if (user is application_user) {
+//     return user;
+//   } else {
+//     return application_user(id: "");
+//   }
+// }
 
 Map<String, dynamic> _$ObjectToJson(application_user instance) => <String, dynamic>{
   'id' : instance.id,

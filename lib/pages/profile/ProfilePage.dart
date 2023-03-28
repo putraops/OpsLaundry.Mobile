@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:mobile_apps/redux/actions.dart';
 import 'package:mobile_apps/redux/appState.dart';
 import 'package:mobile_apps/shared/PageDivider.dart';
 import 'package:mobile_apps/pages/profile/Avatar.dart';
 import 'package:mobile_apps/pages/profile/components/Subtitle.dart';
 import 'package:mobile_apps/pages/profile/components/Submenu.dart';
+import 'package:redux/redux.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mobile_apps/constants/color.dart' as color;
 
+import '../../models/application_user.dart';
 import '../auth/LoginPage.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -22,10 +25,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
-
 
   String getPhone(String value) {
     if (value.isNotEmpty) {
@@ -37,9 +38,9 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: StoreConnector<AppState, AppState>(
-        converter: (store) => store.state,
-        builder: (_, state) {
+      body: StoreConnector<AppState, PageState>(
+        converter: PageState.fromState,
+        builder: (context, state) {
           return SafeArea(
             child: CustomScrollView(
               slivers: <Widget>[
@@ -75,14 +76,14 @@ class _ProfilePageState extends State<ProfilePage> {
                       children: [
                         Row(
                           children: [
-                            Avatar(20, state?.auth?.user?.initialName?.toUpperCase() ?? ""),
+                            Avatar(20, state.user?.initialName ?? ""),
                             Container(
                               margin: const EdgeInsets.only(left: 10),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  Text(state?.auth?.user?.fullname?.toUpperCase() ?? "", style: const TextStyle(fontSize: 15, letterSpacing: -0.4, fontWeight: FontWeight.bold,),),
-                                  Text(getPhone(state.auth.user?.phone ?? ""), style: const TextStyle(fontSize: 12.5),),
+                                  Text(state.user?.fullname!.toUpperCase() ?? "", style: const TextStyle(fontSize: 15, letterSpacing: -0.4, fontWeight: FontWeight.bold,),),
+                                  Text(getPhone(state.user?.phone ?? ""), style: const TextStyle(fontSize: 12.5),),
                                 ],
                               ),
                             ),
@@ -156,7 +157,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   )),
                                   fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 50))
                               ),
-                              onPressed: setLogout,
+                              onPressed: () async { await setLogout(); },
                               child: const Text('Keluar', style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.w900,)),
                             ),
                           ],
@@ -174,14 +175,27 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-
   Future<void> setLogout() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove('storedUser');
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-            builder: (BuildContext context) => const LoginPage()),
-            (Route route) => route == null);
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // await prefs.remove('storedUser');
+    // store.dispatch(SetLogout());
+    // Navigator.of(context).pushAndRemoveUntil(
+    //    MaterialPageRoute(
+    //        builder: (BuildContext context) => const LoginPage()),
+    //        (Route route) => route == null);
   }
 }
 
+class PageState {
+  final application_user? user;
+
+  PageState({
+    required this.user,
+  });
+
+  static PageState fromState(Store<AppState> store) {
+    return PageState(
+      user: store.state.user as application_user,
+    );
+  }
+}

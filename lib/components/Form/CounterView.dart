@@ -39,7 +39,7 @@ class _CounterViewState extends State<CounterView> {
     _decreaseCallback = widget.decreaseCallback ?? () {};
     _minNumber = widget.minNumber ?? 0;
     if (widget.height != null) {
-      _height = widget!.height!;
+      _height = widget.height!;
     }
     super.initState();
   }

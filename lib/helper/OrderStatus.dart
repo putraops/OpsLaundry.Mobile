@@ -1,7 +1,11 @@
 enum OrderStatus {
+  // ignore: constant_identifier_names
   NewOrder,
+  // ignore: constant_identifier_names
   InProgress,
+  // ignore: constant_identifier_names
   Completed,
+  // ignore: constant_identifier_names
   Cancelled,
 }
 

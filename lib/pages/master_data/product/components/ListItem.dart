@@ -4,7 +4,7 @@ import 'package:mobile_apps/components/SkeletonAppend.dart';
 import 'package:mobile_apps/models/product.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:mobile_apps/components/CustomAlertDialog.dart';
-import 'package:mobile_apps/helper/ActiveStatus.dart';
+import 'package:mobile_apps/constants/ActiveStatus.dart';
 import 'package:mobile_apps/navigation/AnimateNavigation.dart';
 import 'package:mobile_apps/constants/color.dart' as color;
 import 'package:mobile_apps/pages/master_data/product/DetailPage.dart';
@@ -130,13 +130,13 @@ class _ListItemState extends State<ListItem> {
               ),
               SlidableAction(
                 onPressed: (BuildContext context){
-                  confirmDialog(
-                      callback: (value) => {
-                        if (value) deleteById(record.id!),
-                      },
-                      confirmButtonText: "Hapus",
-                      cancelButtonText: "Batal", hasCancelButton: true, reverse: true
-                  );
+                  // confirmDialog(
+                  //     callback: (value) => {
+                  //       if (value) deleteById(record.id!),
+                  //     },
+                  //     confirmButtonText: "Hapus",
+                  //     cancelButtonText: "Batal", hasCancelButton: true, reverse: true
+                  // );
                 },
                 backgroundColor: color.primary,
                 foregroundColor: Colors.white,

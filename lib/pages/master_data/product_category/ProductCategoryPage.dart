@@ -1,195 +1,126 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mobile_apps/components/CustomAppBar.dart';
-import 'package:mobile_apps/components/AppBarBottomSheetAction.dart';
-import 'package:mobile_apps/components/NoData.dart';
+import 'package:mobile_apps/models/pagination/DataTableRequest.dart';
 import 'package:mobile_apps/models/product_category.dart';
 import 'package:mobile_apps/helper/FilterRequest.dart';
-import 'package:mobile_apps/pages/master_data/product_category/ProductDetailPage.dart';
-import 'package:mobile_apps/pages/master_data/product_category/components/ContentView.dart';
-import 'package:mobile_apps/pages/master_data/product_category/components/FilterBar.dart';
-import 'package:mobile_apps/navigation/AnimateNavigation.dart';
+import 'package:mobile_apps/pages/master_data/product_category/ProductCategoryDetailPage.dart';
+import 'package:mobile_apps/pages/master_data/product_category/components/ListViewBuilder.dart';
+import 'package:mobile_apps/repository/BaseRepository.dart';
+import 'package:mobile_apps/constants/color.dart' as color;
 
-import 'package:mobile_apps/redux/appState.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:skeletons/skeletons.dart';
-import 'dart:convert';
-
-import 'package:mobile_apps/data/dummies.dart';
+import '../product/components/FilterBar.dart';
 
 class ProductCategoryPage extends StatefulWidget {
+  static const route = "/product_category/index";
   const ProductCategoryPage({Key? key}) : super(key: key);
 
   @override
   State<ProductCategoryPage> createState() => _ProductCategoryPageState();
 }
 
-class _ProductCategoryPageState extends State<ProductCategoryPage> with TickerProviderStateMixin {
-  late List<product_category> data = [];
-  bool isLoading = true;
+class _ProductCategoryPageState extends State<ProductCategoryPage>  {
+  bool hasMore = true;
+  late bool isInit = true;
+  late bool hasUpdate = false;
   late FilterRequest filterRequest;
-  late double filterPage;
-  late double pageHeight;
+  final repo = BaseRepository("product_category");
+
+  late List<product_category> data = [];
+  late DataTableRequest request = DataTableRequest(
+    draw: 0,
+    page: 1,
+    length: 25,
+    columns: [
+      // Columns(
+      //   data: "catalog_name",
+      //   name: "catalog_name",
+      //   searchable: true,
+      //   orderable: true,
+      //   searchRegex: true
+      // ),
+    ],
+    orders: [
+      Orders(column: "name", direction: "asc")
+    ],
+    //search: Search(searchRegex: true, searchValue: search ?? "")
+  );
 
   @override
   initState() {
     super.initState();
     filterRequest = FilterRequest();
-    data = productCategoriDummies;
-    filterPage = 180;
-    pageHeight = filterPage + 50;
-    initialization();
+    data = [];
+    Future.delayed(const Duration(milliseconds: 0), () async { await getPagination(false); },);
   }
 
   @override
   void dispose() {
-    //data = [];
     super.dispose();
   }
 
-  void initialization() async {
-    await Future.delayed(const Duration(seconds: 1), () async { await setIsLoading(false); },);
-  }
+  Future<void> getPagination(bool isLoadMore) async {
+    setState(() { request.draw = request.draw! + 1; });
+    if (isLoadMore) {
+      setState(() { request.page = request.page! + 1; });
+    }
+    if (request.draw! > 1) {
+      setState(() { isInit = false; });
+    }
 
-  Future<void> setIsLoading(bool value) async {
-    setState(() { isLoading = value; });
+    var dt = await repo.getPagination(request);
+    if ((dt.data?.length ?? 0 ) > 0) {
+      List<product_category> newData = dt.data!.map((item) => product_category.fromJson(item)).toList();
+      setState(() {
+        data = [...data, ...newData];
+        hasUpdate = true;
+      });
+      if (data.length >= (dt.recordsTotal ?? 0)) {
+        setState(() { hasMore = false; });
+      }
+    }
   }
 
   Future<void> onFilter(FilterRequest? filterRequest) async {
-    print(filterRequest?.isActive);
-    List<product_category> temp = productCategoriDummies.toList();
-
-    setIsLoading(true);
-    Future.delayed(const Duration(seconds: 1), () async { await setIsLoading(false); },);
-    setState((){
-      if (filterRequest?.organizationId != null){
-        temp = temp.where((r) => r.organizationId == filterRequest?.organizationId).toList();
-      }
-      if (filterRequest?.isActive == null) {
-        temp = temp.toList();
-      } else {
-        temp = temp.where((i) => i.isActive == filterRequest?.isActive).toList();
-      }
-      data = temp;
-    });
-  }
-  
-  Future<product_category> onInsert() async{
-    var item = product_category(id: "a", isActive: true, createdAt: DateTime.now(), organizationName: "Jireh Laundry", name: "Newest", description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.");
-    return item;
+    // Future.delayed(const Duration(seconds: 1), () { setState(() { isLoading = false; }); },);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: customAppBar(context,
-        title: "Kategori Barang",
-        centerTitle: true,
-        actions: [
-          AppBarBottomSheetAction(
-            title: "Pilihan",
-            action: const Icon(Icons.more_horiz, size: 25),
-            body: Padding(
-              padding: const EdgeInsets.only(left: 12.5, right: 12.5, top: 5, bottom: 5),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  GestureDetector(
-                    onTap: (){
-                      Navigator.pop(context);
-                      Navigator.of(context).push(AnimateNavigation(const ProductDetailPage()));
-                    },
-                    child: Row(
-                      children: [
-                        Container(
-                          alignment: const Alignment(-1.5, 0.0),
-                          width: 32.5,
-                          height: 50,
-                          child: const Icon(Icons.add, size: 25),
-                        ),
-                        const Text("Tambah Kategori Barang", style: TextStyle(fontSize: 14, letterSpacing: -.15),)
-                      ],
-                    ),
-                  ),
-                  const Divider(height: 1),
-                  GestureDetector(
-                    onTap: (){},
-                    child: Row(
-                      children: [
-                        Container(
-                          alignment: const Alignment(-0.99, 0.0),
-                          width: 32.5,
-                          height: 50,
-                          child: ClipRRect(
-                            child: Image.asset("assets/icons/alphabetical-sorting-ascending-black.png", height: 22.5, width: 22.5,),
-                          ),
-                        ),
-                        const Text("Urutkan Nama Abjad Terkecil", style: TextStyle(fontSize: 14, letterSpacing: -.15),)
-                      ],
-                    ),
-                  ),
-                  const Divider(height: 1),
-                  GestureDetector(
-                    onTap: (){},
-                    child: Row(
-                      children: [
-                        Container(
-                          alignment: const Alignment(-0.99, 0.0),
-                          width: 32.5,
-                          height: 50,
-                          child: ClipRRect(
-                            child: Image.asset("assets/icons/alphabetical-sorting-descending-black.png", height: 22.5, width: 22.5),
-                          ),
-                        ),
-                        const Text("Urutkan Nama Abjad Terbesar", style: TextStyle(fontSize: 14, letterSpacing: -.15),)
-                      ],
-                    ),
-                  ),
-                  const Divider(height: 1),
-                ],
-              ),
-            ),
-            size: 0.5,
-            hasRadius: false,
-            inPixel: true,
-            sizeInPixel: 180,
-          ),
-          const SizedBox(width: 15,),
-        ]
-      ),
-      body: StoreConnector<AppState, AppState>(
-        converter: (store) => store.state,
-        builder: (_, state) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (true) (
-                  SizedBox(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: FilterBar(onFilter: onFilter,),
-                    ),
-                  )
-              ),
-              Expanded(
-                child: Skeleton(
-                  isLoading: isLoading,
-                  skeleton: SkeletonListView(
-                    itemCount: 20,
-                    scrollable: false,
-                  ),
-                  child: data.isEmpty ? const NoData():
-                    ContentView(
-                      items: data,
-                      onInsert: () async { return onInsert(); },
-                      setIsLoading: (value) async => { await setIsLoading(value) },
-                    ),
-                )
-              )
-            ],
+      appBar: customAppBar(context, title: "Kategori Barang", centerTitle: true, ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          final result = await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const ProductCategoryDetailPage()),
           );
-        }
+          if (result != null) {
+            setState(() {
+              data = [...data, ...[result["value"]]];
+              hasUpdate = true;
+            });
+            // getPagination(true);
+          }
+        },
+        backgroundColor: color.primary,
+        tooltip: "Tambah Barang",
+        child: const Icon(Icons.add, size: 30,),
       ),
+      body: Column(
+        children: [
+          if (true) (
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5),
+                child: FilterBar(onFilter: onFilter,),
+              )
+          ),
+          Expanded(
+            child: ListViewBuilder(isInit: isInit, data: data, hasMore: hasMore, fetch: (value) => getPagination(value) ),
+          )
+        ],
+      )
     );
   }
 }

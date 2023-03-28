@@ -1,5 +1,7 @@
 enum ActiveStatus {
+  // ignore: constant_identifier_names
   Active,
+  // ignore: constant_identifier_names
   InActive,
 }
 
@@ -37,16 +39,6 @@ String getStatusNameByStatus(bool status) {
 
 bool? getStatusCode(ActiveStatus? status) {
   bool? result = true;
-  switch(status) {
-    case ActiveStatus.Active:
-      result = true;
-      break;
-    case ActiveStatus.InActive:
-      result = false;
-      break;
-    default:
-      result = null;
-      break;
-  }
+
   return result;
 }

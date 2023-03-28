@@ -37,7 +37,7 @@ class _TextBoxState extends State<TextBox> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TitleText(title: title ?? ""),
+        TitleText(title: title),
         const SizedBox(height: 3,),
         TextFormField(
           keyboardType: TextInputType.emailAddress,

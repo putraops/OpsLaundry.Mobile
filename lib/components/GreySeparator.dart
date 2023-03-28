@@ -6,7 +6,7 @@ class GreySeparator extends StatelessWidget {
 
   const GreySeparator({
     super.key,
-    this.height = 10,
+    this.height = 5,
   });
 
   @override

@@ -1,25 +1,41 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:mobile_apps/pages/auth/LoginPage.dart';
 import 'package:mobile_apps/pages/order/new_order/NewOrderPage.dart';
 import 'package:mobile_apps/pages/profile/ProfilePage.dart';
 import 'package:mobile_apps/pages/order/OrderPage.dart';
 import 'package:mobile_apps/pages/dashboard/DashboardPage.dart';
 import 'package:mobile_apps/pages/notification/NotificationPage.dart';
 import 'package:mobile_apps/constants/color.dart' as color;
-import 'package:mobile_apps/redux/Store.dart';
+import 'package:mobile_apps/redux/store.dart';
 import 'package:mobile_apps/navigation/AnimateNavigation.dart';
+
+import 'package:mobile_apps/utils/Navigate.dart';
+import 'package:mobile_apps/context/GlobalContext.dart';
 
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import '../context/UserContext.dart';
 import '../redux/appState.dart';
 
-class BottomNavigationBarController extends StatefulWidget {
-  const BottomNavigationBarController({super.key});
-
-  @override
-  State<BottomNavigationBarController> createState() => _BottomNavigationBarControllerState();
+void mainNavigation() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  var store = await AppStore().getStoreAsync();
+  runApp(MainNavigation(store));
 }
 
-class _BottomNavigationBarControllerState extends State<BottomNavigationBarController> {
+class MainNavigation extends StatefulWidget {
+  static const route = '/index';
+  final Store<AppState> store;
+
+  const MainNavigation(this.store, {super.key});
+
+  @override
+  State<MainNavigation> createState() => _MainNavigationState();
+}
+
+class _MainNavigationState extends State<MainNavigation> {
   int _selectedIndex = 0;
   final PageStorageBucket bucket = PageStorageBucket();
   final List<Widget> pages = [
@@ -36,6 +52,13 @@ class _BottomNavigationBarControllerState extends State<BottomNavigationBarContr
       key: PageStorageKey('profilePage'),
     ),
   ];
+
+  void initialization(MainState state) async {
+    var user = await UserContext().invokeUser();
+    if (!state!.isLogin || user == null) {
+      clearStackAndPushRoute(NavigationService.navigatorKey.currentContext!, const LoginPage());
+    }
+  }
 
   Widget _bottomNavigationBar(int selectedIndex) => BottomNavigationBar(
     onTap: (int index) => setState(() => _selectedIndex = index),
@@ -68,20 +91,14 @@ class _BottomNavigationBarControllerState extends State<BottomNavigationBarContr
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: StoreConnector<AppState, LoginState>(
-        converter: (Store<AppState> store) => store.state.auth,
-        builder: (BuildContext context, LoginState init) {
-          // print('IsLogin: ${store.state.isLogin}');
-          // bool current = store.state!.isLogin!;
-          // print('current: ${current}');
-          // print('token: ${store.state!.token}');
+      floatingActionButton: StoreConnector<AppState, MainState>(
+        converter: MainState.fromState,
+        onInitialBuild: (state) {
+          initialization(state);
+        },
+        builder: (BuildContext context, MainState init) {
           return FloatingActionButton( //Floating action button on Scaffold
             onPressed: () => {
-              // print('token: ${store.state!.auth}')
-              print('IsLogin: ${store.state.auth.isLogin}'),
-              print('token: ${store.state.auth.token}'),
-              print('token: ${store.state.auth.user!.fullname}'),
-              //StoreProvider.of<AppState>(context).dispatch(SetLogin(!store.state!.isLogin!))
               Navigator.of(context).push(AnimateNavigation(const NewOrderPage()))
             },
             backgroundColor: color.primary,
@@ -100,6 +117,23 @@ class _BottomNavigationBarControllerState extends State<BottomNavigationBarContr
         bucket: bucket,
         child: pages[_selectedIndex],
       ),
+    );
+  }
+}
+
+class MainState {
+  final bool isLogin;
+  final dynamic user;
+
+  MainState({
+    required this.isLogin,
+    this.user,
+  });
+
+  static MainState fromState(Store<AppState> store) {
+    return MainState(
+      isLogin: store.state.isLogin ?? false,
+      user: store.state.user
     );
   }
 }

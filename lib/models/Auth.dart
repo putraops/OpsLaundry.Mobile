@@ -11,6 +11,11 @@ class Auth {
   /// Connect the generated [_$PersonFromJson] function to the `fromJson`
   /// factory.
   Map<String, dynamic> toJson() => _$ObjectToJson(this);
+
+  factory Auth.fromJson(Map<String, dynamic> json) => Auth(
+    email: json['email'],
+    password: json['password'],
+  );
 }
 
 Map<String, dynamic> _$ObjectToJson(Auth instance) => <String, dynamic>{

@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:mobile_apps/components/BottomSheet.dart';
 import 'package:mobile_apps/components/Filter/ListActiveStatus.dart';
 import 'package:mobile_apps/components/Filter/ListOrganization.dart';
-import 'package:mobile_apps/helper/ActiveStatus.dart';
+import 'package:mobile_apps/constants/ActiveStatus.dart';
 import 'package:mobile_apps/constants/color.dart' as color;
-import'package:mobile_apps/helper/FilterRequest.dart';
+import 'package:mobile_apps/helper/FilterRequest.dart';
 import 'package:mobile_apps/models/organization.dart';
+import 'package:mobile_apps/components/Form/RadioButtonBadge.dart';
+import 'package:mobile_apps/components/Form/CheckBoxButtonBadge.dart';
+import 'package:mobile_apps/commons/FilterObj.dart';
+import 'package:mobile_apps/redux/appState.dart';
 
 class FilterBar extends StatefulWidget {
-  final Future Function(FilterRequest?) onFilter;
+  final Future Function(FilterRequest) onFilter;
 
   const FilterBar({
     super.key,
-     required this.onFilter,
+    required this.onFilter,
   });
 
   @override
@@ -20,7 +25,7 @@ class FilterBar extends StatefulWidget {
 }
 
 class _FilterBarState extends State<FilterBar> {
-  FilterRequest? filter;
+  late FilterRequest filter;
   ActiveStatus? _activeStatus;
   organization? _organization;
   final double boxSize = 30;
@@ -37,7 +42,7 @@ class _FilterBarState extends State<FilterBar> {
       _activeStatus = value;
     });
 
-    filter?.isActive = getStatusCode(value);
+    filter.isActive = getStatusCode(value);
     await widget.onFilter(filter);
   }
 
@@ -45,11 +50,7 @@ class _FilterBarState extends State<FilterBar> {
     setState(() {
       _organization = value;
     });
-    print(filter?.organizationId);
-    print(filter?.isActive);
-
-    filter?.organizationId = value?.id;
-    filter?.isActive = getStatusCode(_activeStatus);
+    filter.organizationId = value?.id;
     await widget.onFilter(filter);
   }
 
@@ -61,11 +62,6 @@ class _FilterBarState extends State<FilterBar> {
     widget.onFilter(FilterRequest());
   }
 
-  bool hasFilter() {
-    if (_activeStatus != null || _organization != null) return true;
-    return false;
-  }
-
   Widget clearFilter() {
     return Row(
       children: [
@@ -75,11 +71,11 @@ class _FilterBarState extends State<FilterBar> {
             padding: const EdgeInsets.only(top: 3.5, bottom: 3, left: 12.5, right: 12.5),
             height: boxSize,
             decoration: BoxDecoration(
-              border: Border.all(color: hasFilter() ? color.primary : Colors.black12),
+              border: Border.all(color: _activeStatus != null ? color.primary : Colors.black12),
               borderRadius: BorderRadius.all(Radius.circular(boxRadius)),
-              color: hasFilter() ? color.selectedBackgroundColor : Colors.transparent,
+              color: _activeStatus == null ? Colors.transparent : color.selectedBackgroundColor,
             ),
-            child: Text("X", style: TextStyle(fontSize: 14, color: hasFilter() ? color.primary : color.defaultTextColor, letterSpacing: -0.15),),
+            child: Text("X", style: TextStyle(fontSize: 14, color: _activeStatus == null ? color.defaultTextColor : color.primary, letterSpacing: -0.15),),
           ),
         ),
         const SizedBox(width: 5,),
@@ -89,80 +85,176 @@ class _FilterBarState extends State<FilterBar> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: boxSize,
-      child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          scrollDirection: Axis.horizontal,
-          children: [
-            if (_organization != null || _activeStatus != null) clearFilter(),
-            GestureDetector(
-              onTap: () {
-                bottomSheet(
-                  context,
-                  "Cari Berdasarkan Status",
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child:
-                    ListActiveStatus(
-                      selected: _activeStatus,
-                      onSelect: (value) async => await setOrderStatus(value),
+    return StoreConnector<AppState, AppState>(
+      converter: (store) => store.state,
+      builder: (_, state) {
+        return SizedBox(
+          height: boxSize,
+          child: ListView(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              scrollDirection: Axis.horizontal,
+              children: [
+                if (_organization != null || _activeStatus != null) clearFilter(),
+                GestureDetector(
+                  onTap: () {
+                    bottomSheet(
+                      context,
+                      "Cari Berdasarkan Status",
+                      Padding(
+                          padding: const EdgeInsets.all(15),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              const Text("Urutkan", style: TextStyle(fontSize: 15, color: Color.fromRGBO(1, 1, 1, 0.8), fontWeight: FontWeight.w600, letterSpacing: -0.5)),
+                              const SizedBox(height: 7.5,),
+
+                              RadioButtonBadge(
+                                  items: [
+                                    FilterObj(key: "newest", value: "Terbaru"),
+                                    FilterObj(key: "name_asc", value: "Nama Abjad Terkecil"),
+                                    FilterObj(key: "name_desc", value: "Nama Abjad Terbesar"),
+                                  ]
+                              ),
+
+                              const SizedBox(height: 15,),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text("Kategori", style: TextStyle(fontSize: 15, color: Color.fromRGBO(1, 1, 1, 0.8), fontWeight: FontWeight.w600, letterSpacing: -0.5)),
+                                  // Text("Lihat Semua", style: TextStyle(fontSize: 12, color: color.primary, fontWeight: FontWeight.w600, letterSpacing: -0.5)),
+                                  GestureDetector(
+                                    onTap: () {
+                                      bottomSheet(
+                                          context,
+                                          "Cari Berdasarkan Status",
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 15),
+                                            child:
+                                            ListActiveStatus(
+                                              selected: _activeStatus,
+                                              onSelect: (value) async => await setOrderStatus(value),
+                                            ),
+                                          ),
+                                          size: 0.6
+                                      );
+                                    },
+                                    child: const Text("Lihat Semua", style: TextStyle(fontSize: 12, color: color.primary, fontWeight: FontWeight.w600, letterSpacing: -0.5)),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 7.5,),
+                              CheckBoxButtonBadge(
+                                  items: [
+                                    FilterObj(key: "1", value: "Sepatu"),
+                                    FilterObj(key: "2", value: "Celana"),
+                                    FilterObj(key: "3", value: "Jas"),
+                                  ]
+                              ),
+                            ],
+                          )
+                      ),
+                      size: 0.75,
+                      dismissSize: 0.4,
+                      hasRadius: false,
+                      hasAction: true,
+                    );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.only(left: 12.5, right: 5.5),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: _activeStatus == null ? color.defaultBorderColor : color.primary),
+                      borderRadius: BorderRadius.all(Radius.circular(boxRadius)),
+                      color: _activeStatus == null ? Colors.transparent : color.selectedBackgroundColor,
+                    ),
+                    child: Row(
+                      children: [
+                        Text(_activeStatus == null ? "Filter" : getStatusName(_activeStatus!), style: TextStyle(fontSize: 13, color: _activeStatus == null ? color.defaultTextColor : color.primary, letterSpacing: -0.15),),
+                        const SizedBox(width: 2),
+                        Icon(Icons.keyboard_arrow_down, color: _activeStatus == null ? color.defaultTextColor : color.primary, size: 25),
+                      ],
                     ),
                   ),
-                  size: 0.6
-                );
-              },
-              child: Container(
-                padding: const EdgeInsets.only(left: 12.5, right: 5.5),
-                decoration: BoxDecoration(
-                  border: Border.all(color: _activeStatus == null ? color.defaultBorderColor : color.primary),
-                  borderRadius: BorderRadius.all(Radius.circular(boxRadius)),
-                  color: _activeStatus == null ? Colors.transparent : color.selectedBackgroundColor,
                 ),
-                child: Row(
-                  children: [
-                    Text(_activeStatus == null ? "Semua Status" : getStatusName(_activeStatus!), style: TextStyle(fontSize: 13, color: _activeStatus == null ? color.defaultTextColor : color.primary, letterSpacing: -0.15),),
-                    const SizedBox(width: 2),
-                    Icon(Icons.keyboard_arrow_down, color: _activeStatus == null ? color.defaultTextColor : color.primary, size: 25),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(width: 5,),
-            GestureDetector(
-              onTap: () {
-                bottomSheet(
-                  context,
-                  "Pilih Organisasi",
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child:
-                    ListOrganization(
-                      selected: _organization,
-                      onSelect: (value) async => await setOrganization(value),
+                const SizedBox(width: 5,),
+                GestureDetector(
+                  onTap: () {
+                    bottomSheet(
+                        context,
+                        "Cari Berdasarkan Status",
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          child:
+                          ListActiveStatus(
+                            selected: _activeStatus,
+                            onSelect: (value) async => await setOrderStatus(value),
+                          ),
+                        ),
+                        size: 0.6
+                    );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.only(left: 12.5, right: 5.5),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: _activeStatus == null ? color.defaultBorderColor : color.primary),
+                      borderRadius: BorderRadius.all(Radius.circular(boxRadius)),
+                      color: _activeStatus == null ? Colors.transparent : color.selectedBackgroundColor,
+                    ),
+                    child: Row(
+                      children: [
+                        Text(_activeStatus == null ? "Semua Status" : getStatusName(_activeStatus!), style: TextStyle(fontSize: 13, color: _activeStatus == null ? color.defaultTextColor : color.primary, letterSpacing: -0.15),),
+                        const SizedBox(width: 2),
+                        Icon(Icons.keyboard_arrow_down, color: _activeStatus == null ? color.defaultTextColor : color.primary, size: 25),
+                      ],
                     ),
                   ),
-                  size: 0.8
-                );
-              },
-              child: Container(
-                padding: const EdgeInsets.only(left: 12.5, right: 5.5),
-                decoration: BoxDecoration(
-                  border: Border.all(color: _organization == null ? color.defaultBorderColor : color.primary),
-                  borderRadius: BorderRadius.all(Radius.circular(boxRadius)),
-                  color: _organization == null ? Colors.transparent : color.selectedBackgroundColor,
                 ),
-                child: Row(
-                  children: [
-                    Text(_organization?.name ?? "Semua Organisasi", style: TextStyle(fontSize: 13, color: _organization == null ? color.defaultTextColor : color.primary, letterSpacing: -0.15),),
-                    const SizedBox(width: 2),
-                    Icon(Icons.keyboard_arrow_down, color: _organization == null ? color.defaultTextColor : color.primary, size: 25),
-                  ],
-                ),
-              ),
-            ),
-          ]
-      ),
+                const SizedBox(width: 5,),
+                if (true) (
+                  Column(
+                    children: [
+                      const SizedBox(width: 5,),
+                      GestureDetector(
+                        onTap: () {
+                          bottomSheet(
+                              context,
+                              "Pilih Organisasi",
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 15),
+                                child:
+                                ListOrganization(
+                                  selected: _organization,
+                                  onSelect: (value) async => await setOrganization(value),
+                                ),
+                              ),
+                              size: 0.75,
+                              hasRadius: false
+                          );
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.only(left: 12.5, right: 5.5),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: _organization == null ? color.defaultBorderColor : color.primary),
+                            borderRadius: BorderRadius.all(Radius.circular(boxRadius)),
+                            color: _organization == null ? Colors.transparent : color.selectedBackgroundColor,
+                          ),
+                          child: Row(
+                            children: [
+                              Text(_organization?.name ?? "Semua Organisasi", style: TextStyle(fontSize: 13, color: _organization == null ? color.defaultTextColor : color.primary, letterSpacing: -0.15),),
+                              const SizedBox(width: 2),
+                              Icon(Icons.keyboard_arrow_down, color: _organization == null ? color.defaultTextColor : color.primary, size: 25),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                )
+              ]
+          ),
+        );
+      }
     );
   }
 }

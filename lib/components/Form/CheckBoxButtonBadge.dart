@@ -62,7 +62,7 @@ class _CheckBoxItemState extends State<CheckBoxItem> {
   @override
   void initState() {
     // TODO: implement initState
-    isSelected = widget?.isSelected ?? false;
+    isSelected = widget.isSelected ?? false;
     super.initState();
   }
 

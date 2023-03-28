@@ -41,7 +41,6 @@ dependencies:
   flutter_slidable: 2.0.0
   bottom_sheet: ^3.1.2
   skeletons: ^0.0.3
-  flutter_native_splash: ^2.2.17
   quiver: ^3.2.1
   json_annotation: ^4.8.0
   json_serializable: ^6.6.1
@@ -51,6 +50,7 @@ dependencies:
   redux_thunk: ^0.4.0
   redux_persist: ^0.9.0
   intl: ^0.18.0
+  path_provider: ^2.0.14
 
 dev_dependencies:
   flutter_test:
@@ -62,6 +62,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  build_runner: ^2.3.3
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -85,10 +86,12 @@ flutter:
     - assets/icons/alphabetical-sorting-descending-white.png
     - assets/icons/arrow-left-black.png
     - assets/icons/arrow-left-white.png
+    - assets/icons/checkmark.png
     - assets/icons/clothes.png
     - assets/icons/customer.png
     - assets/icons/dry-cleaning.png
     - assets/icons/document.png
+    - assets/icons/error.png
     - assets/icons/four-squares.png
     - assets/icons/four-squares-color.png
     - assets/icons/iron.png
@@ -172,25 +175,3 @@ flutter:
           weight: 800
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
-
-flutter_native_splash:
-  #color: "#D22929"
-  color: "#FFFFFF"
-  image: "assets/images/test-image.png"
-
-  # The position of the splash image can be set with android_gravity, ios_content_mode, and
-  # web_image_mode parameters.  All default to center.
-  #
-  # android_gravity can be one of the following Android Gravity (see
-  # https://developer.android.com/reference/android/view/Gravity): bottom, center,
-  # center_horizontal, center_vertical, clip_horizontal, clip_vertical, end, fill, fill_horizontal,
-  # fill_vertical, left, right, start, or top.
-  android_gravity: center
-
-  # To hide the notification bar, use the fullscreen parameter.  Has no effect in web since web
-  # has no notification bar.  Defaults to false.
-  # NOTE: Unlike Android, iOS will not automatically show the notification bar when the app loads.
-  #       To show the notification bar, add the following code to your Flutter app:
-  #       WidgetsFlutterBinding.ensureInitialized();
-  #       SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom, SystemUiOverlay.top]);
-  fullscreen: true
