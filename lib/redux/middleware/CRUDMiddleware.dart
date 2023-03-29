@@ -2,8 +2,6 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:mobile_apps/components/AppSnackBar.dart';
-import 'package:mobile_apps/components/CustomAlertDialog.dart';
-import 'package:mobile_apps/components/AppDialog.dart';
 import 'package:mobile_apps/config/Api.dart';
 import 'package:mobile_apps/models/application_user.dart';
 import 'package:mobile_apps/models/pagination/DataTableRequest.dart';
