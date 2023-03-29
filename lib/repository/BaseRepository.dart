@@ -51,6 +51,8 @@ class BaseRepository {
       }
     } on DioError catch (e) {
       print(e.response);
+      var data = ErrorResponse.fromJson(e.response!.data);
+      result = data.error;
     }
     return result;
   }

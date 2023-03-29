@@ -61,12 +61,12 @@ class _ListItemState extends State<ListItem> {
                   ),
                   if (state.user!.isSystemAdmin! || state.user!.isAdmin!) (
                     Container(
-                      width: 90,
+                      width: 75,
                       padding: const EdgeInsets.symmetric(vertical: 5),
                       color: data.isActive! ? color.successBackgroundColor : color.primaryBackgroundColor,
                       child: Center(
                         child: Text(getStatusNameByStatus(data.isActive!),
-                          style: TextStyle(fontSize: 13,
+                          style: TextStyle(fontSize: 11,
                               color: data.isActive! ? color.success : color.primary,
                               fontWeight: FontWeight.w600,
                               letterSpacing: -.25),

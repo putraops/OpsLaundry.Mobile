@@ -15,7 +15,9 @@ appDialog(
   DialogType type,
   {
     required String dialogText,
+    String? description,
     bool? hasCloseButton = false,
+    bool? hasDescription = true,
     Function(bool)? callback,
     String? buttonText
   }
@@ -26,8 +28,11 @@ appDialog(
     barrierDismissible: false,
     context: context,
     builder: (BuildContext context) => DialogOverlay(
-      type, dialogText,
+      type,
+      dialogText,
+      description,
       hasCloseButton: hasCloseButton,
+      hasDescription: hasDescription,
       callback: callback,
       buttonText: buttonText,
     ),
@@ -37,17 +42,22 @@ appDialog(
 class DialogOverlay extends StatefulWidget {
   final DialogType dialogType;
   final String? dialogText;
+  final String? description;
+
 
   final bool? hasCloseButton;
+  final bool? hasDescription;
   final Function(bool)? callback;
   final String? buttonText;
 
   const DialogOverlay(
     this.dialogType,
     this.dialogText,
+    this.description,
     {
       super.key,
       this.hasCloseButton = false,
+      this.hasDescription = true,
       this.callback,
       this.buttonText
     }
@@ -60,6 +70,7 @@ class DialogOverlay extends StatefulWidget {
 class DialogOverlayState extends State<DialogOverlay> with SingleTickerProviderStateMixin {
   DialogType get dialogType => widget.dialogType;
   late String? dialogText = widget.dialogText;
+  late String description = widget.description ?? "Jika dihapus maka tidak akan bisa kembalikan lagi!";
   late AnimationController controller;
   late Animation<double> scaleAnimation;
 
@@ -174,11 +185,17 @@ class DialogOverlayState extends State<DialogOverlay> with SingleTickerProviderS
             ),
           );
           return [
-            const SizedBox(height: 10,),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15),
-              child: Text("Jika dihapus maka tidak akan bisa kembalikan lagi!", textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 14, color: color.defaultTextColor)),
+            if (widget.hasDescription ?? true) (
+              Column(
+                children: [
+                  const SizedBox(height: 10,),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: Text(description, textAlign: TextAlign.center,
+                        style: const TextStyle(fontSize: 14, color: color.defaultTextColor)),
+                  ),
+                ],
+              )
             ),
             const SizedBox(height: 15,),
             Row(

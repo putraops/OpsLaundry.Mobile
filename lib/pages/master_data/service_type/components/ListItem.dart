@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_apps/models/service_type.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:mobile_apps/components/CustomAlertDialog.dart';
 import 'package:mobile_apps/constants/ActiveStatus.dart';
 import 'package:mobile_apps/constants/color.dart' as color;
 

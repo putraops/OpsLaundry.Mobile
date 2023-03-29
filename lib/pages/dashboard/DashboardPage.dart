@@ -61,7 +61,7 @@ class DashboardPage extends StatelessWidget {
                               ListTile(
                                 leading: null,
                                 title: Text("AA",
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 18,
                                       shadows: [

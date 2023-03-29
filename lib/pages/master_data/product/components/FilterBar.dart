@@ -1,14 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:mobile_apps/components/BottomSheet.dart';
+import 'package:mobile_apps/components/Filter/CheckBoxButtonBadge.dart';
 import 'package:mobile_apps/components/Filter/ListActiveStatus.dart';
 import 'package:mobile_apps/components/Filter/ListOrganization.dart';
+import 'package:mobile_apps/components/Filter/RadioButtonBadge.dart';
 import 'package:mobile_apps/constants/ActiveStatus.dart';
 import 'package:mobile_apps/constants/color.dart' as color;
 import 'package:mobile_apps/helper/FilterRequest.dart';
+import 'package:mobile_apps/models/filters/FilterObject.dart';
 import 'package:mobile_apps/models/organization.dart';
-import 'package:mobile_apps/components/Form/RadioButtonBadge.dart';
-import 'package:mobile_apps/components/Form/CheckBoxButtonBadge.dart';
-import 'package:mobile_apps/commons/FilterObj.dart';
 
 class FilterBar extends StatefulWidget {
   final Future Function(FilterRequest) onFilter;
@@ -107,10 +109,14 @@ class _FilterBarState extends State<FilterBar> {
 
                         RadioButtonBadge(
                           items: [
-                            FilterObj(key: "newest", value: "Terbaru"),
-                            FilterObj(key: "name_asc", value: "Nama Abjad Terkecil"),
-                            FilterObj(key: "name_desc", value: "Nama Abjad Terbesar"),
-                          ]
+                            FilterObject(key: "created_on", value: "DESC",  displayName: "Terbaru"),
+                            FilterObject(key: "name", value: "ASC", displayName: "Nama Abjad Terkecil"),
+                            FilterObject(key: "name", value: "DESC", displayName: "Nama Abjad Terbesar"),
+                          ],
+                          callbackResult: (value) => {
+                            print((value as FilterObject).key),
+                            print((value).value),
+                          },
                         ),
 
                         const SizedBox(height: 15,),
@@ -142,10 +148,14 @@ class _FilterBarState extends State<FilterBar> {
                         const SizedBox(height: 7.5,),
                         CheckBoxButtonBadge(
                           items: [
-                            FilterObj(key: "1", value: "Sepatu"),
-                            FilterObj(key: "2", value: "Celana"),
-                            FilterObj(key: "3", value: "Jas"),
-                          ]
+                            FilterObject(key: "created_on", value: "DESC",  displayName: "Baju"),
+                            FilterObject(key: "name", value: "ASC", displayName: "Celana"),
+                            FilterObject(key: "name", value: "DESC", displayName: "A"),
+                          ],
+                          callbackResult: (value) => {
+                            print(jsonEncode(value)),
+                            // print((value as FilterOrder).direction),
+                          },
                         ),
                       ],
                     )
@@ -154,6 +164,7 @@ class _FilterBarState extends State<FilterBar> {
                   dismissSize: 0.4,
                   hasRadius: false,
                   hasAction: true,
+                  onActionPress: () { print("a"); }
                 );
               },
               child: Container(

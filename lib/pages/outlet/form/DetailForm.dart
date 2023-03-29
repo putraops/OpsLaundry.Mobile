@@ -6,6 +6,7 @@ import 'package:mobile_apps/components/LoadingDialog.dart';
 import 'package:mobile_apps/components/SkeletonAppend.dart';
 import 'package:mobile_apps/models/product_category.dart';
 import 'package:mobile_apps/components/AppDialog.dart';
+import 'package:mobile_apps/models/tenant.dart';
 
 import 'package:mobile_apps/repository/BaseRepository.dart';
 
@@ -22,11 +23,11 @@ class DetailForm extends StatefulWidget {
 }
 
 class _DetailFormState extends State<DetailForm> {
-  var repo = BaseRepository("product_category");
+  var repo = BaseRepository("tenant");
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final AutovalidateMode _autoValidate = AutovalidateMode.disabled;
   static const double titleSize = 13;
-  late product_category? data = product_category();
+  late tenant? data = tenant();
   late Future<void> fetch;
   late String errorMessage = "";
   var loading = LoadingDialog();
@@ -44,7 +45,7 @@ class _DetailFormState extends State<DetailForm> {
         setState(() { errorMessage = res; });
       } else {
         setState(() {
-          data = product_category.fromJson(res);
+          data = tenant.fromJson(res);
         });
       }
     }
@@ -57,8 +58,8 @@ class _DetailFormState extends State<DetailForm> {
     if (res is String) {
       setState(() {errorMessage = res; });
     } else {
-      setState(() { data = product_category.fromJson(res); });
-      await appDialog( DialogType.Success, dialogText: "Berhasil ${widget.recordId == null ? "menambah" : "mengubah"} Kategori.",
+      setState(() { data = tenant.fromJson(res); });
+      await appDialog( DialogType.Success, dialogText: "Berhasil ${widget.recordId == null ? "menambah" : "mengubah"} Outlet.",
           callback: (value) async {
             Navigator.pop(context, {
               "isNew": widget.recordId == null,
@@ -96,7 +97,7 @@ class _DetailFormState extends State<DetailForm> {
                             textInputAction: TextInputAction.next,
                             floatingLabelBehavior: FloatingLabelBehavior.never,
                             contentPadding: const EdgeInsets.only(top: 2.5, bottom: 7.5),
-                            hintText: "Contoh: Baju",
+                            hintText: "Contoh: Ops Laundry",
                             hintStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Color.fromRGBO(0, 0, 0, 0.375), letterSpacing: -.5),
                             errorText: "Nama tidak boleh kosong.",
                             border: const UnderlineInputBorder(),

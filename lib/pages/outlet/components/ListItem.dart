@@ -1,17 +1,99 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_apps/models/application_user.dart';
 import 'package:mobile_apps/constants/color.dart' as color;
+import 'package:mobile_apps/models/tenant.dart';
+import 'package:mobile_apps/redux/appState.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:redux/redux.dart';
 
 class ListItem extends StatefulWidget {
-  final application_user user;
+  final tenant data;
+  final int index;
 
-  const ListItem(this.user, { super.key });
+  const ListItem({
+    required this.data,
+    required this.index,
+    super.key
+  });
 
   @override
   State<ListItem> createState() => _ListItemState();
 }
 
 class _ListItemState extends State<ListItem> {
+  tenant get data => widget.data;
+  int get index => widget.index;
+
+  @override
+  initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    double sizedBox = MediaQuery.of(context).size.width - 30 - 50 - 10;
+
+    return StoreConnector<AppState, PageState>(
+      converter: PageState.fromState,
+      builder: (_, PageState state) {
+        return Container(
+          color: Colors.white,
+          padding: const EdgeInsets.all(15),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (data.isDefault ?? false == true) primaryTenant(),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Image.asset("assets/icons/store.png", height: 50, width: 50,),
+                  const SizedBox(width: 10,),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: sizedBox,
+                        child: Text(
+                          data.name ?? "",
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600, letterSpacing: -.25),
+                        ),
+                      ),
+                      SizedBox(
+                        width: sizedBox,
+                        child: Text(
+                            data.address ?? "",
+                            maxLines: 5,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(fontSize: 14, color: Colors.black54)
+                        ),
+                      ),
+                      SizedBox(
+                        width: sizedBox,
+                        child: Text(
+                            data.phone ?? "",
+                            maxLines: 5,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(fontSize: 14, color: Colors.black54, fontWeight: FontWeight.w600, letterSpacing: -.5)
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+
+  }
 
   Widget primaryTenant() {
     return Column(
@@ -34,53 +116,18 @@ class _ListItemState extends State<ListItem> {
       ],
     );
   }
+}
 
-  @override
-  Widget build(BuildContext context) {
-    // 30 outer margin; 30 inner padding; 50 size of AvatarCircle; 15 size of SizedBox
-    double sizedBox = MediaQuery.of(context).size.width - 30 - 50 - 10;
+class PageState {
+  final application_user? user;
 
-    application_user user = widget.user;
-    return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.all(15),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (user.isDefault ?? false == true) primaryTenant(),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Image.asset("assets/icons/store.png", height: 50, width: 50,),
-              const SizedBox(width: 10,),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: sizedBox,
-                    child: Text(
-                      user.tenantName ?? "",
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600, letterSpacing: -.25),
-                    ),
-                  ),
-                  const SizedBox(height: 2.5,),
-                  SizedBox(
-                    width: sizedBox,
-                    child: const Text(
-                        "Jalan Amplas No. 32, Medan. Jalan Amplas No. 32, Medan. Jalan Amplas No. 32, Medan. Jalan Amplas No. 32, Medan.Jalan Amplas No. 32, Medan.",
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: 13, color: Colors.black54)
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ],
-      ),
+  PageState({
+    this.user,
+  });
+
+  static PageState fromState(Store<AppState> store) {
+    return PageState(
+        user: store.state.user,
     );
   }
 }

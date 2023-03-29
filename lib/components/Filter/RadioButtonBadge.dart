@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_apps/commons/FilterObj.dart';
 import 'package:mobile_apps/constants/color.dart' as color;
+import 'package:mobile_apps/models/filters/FilterObject.dart';
 
 class RadioButtonBadge extends StatefulWidget {
-  final List<FilterObj> items;
+  final List<FilterObject> items;
+  final Function(dynamic) callbackResult;
 
   const RadioButtonBadge({
     super.key,
     required this.items,
+    required this.callbackResult,
   });
 
   @override
@@ -32,14 +34,19 @@ class _RadioButtonBadgeState extends State<RadioButtonBadge> {
     );
   }
 
-  Widget button({required FilterObj item, required int index}) {
+  void selectValue(int index) {
+    var i = widget.items[index];
+    setState(() {
+      _selectedValueIndex = index;
+    });
+
+    widget.callbackResult(i);
+  }
+
+  Widget button({required FilterObject item, required int index}) {
     return InkWell(
       splashColor: Colors.cyanAccent,
-      onTap: () {
-        setState(() {
-          _selectedValueIndex = index;
-        });
-      },
+      onTap: () { selectValue(index); },
       child: Container(
         margin: const EdgeInsets.only(right: 10, bottom: 10),
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
@@ -48,7 +55,7 @@ class _RadioButtonBadgeState extends State<RadioButtonBadge> {
           border: Border.all(color: _selectedValueIndex == index ? color.primary : color.defaultBorderColor,),
           borderRadius: BorderRadius.circular(7.5),
         ),
-        child: Text(item.value, style: TextStyle(fontSize: 13, color: _selectedValueIndex == index ? color.primary : color.defaultTextColor)),
+        child: Text(item.displayName!, style: TextStyle(fontSize: 13, color: _selectedValueIndex == index ? color.primary : color.defaultTextColor)),
       ),
     );
   }

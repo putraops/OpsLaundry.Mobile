@@ -1,15 +1,18 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:mobile_apps/components/BottomSheet.dart';
+import 'package:mobile_apps/components/Filter/CheckBoxButtonBadge.dart';
 import 'package:mobile_apps/components/Filter/ListActiveStatus.dart';
 import 'package:mobile_apps/components/Filter/ListOrganization.dart';
+import 'package:mobile_apps/components/Filter/RadioButtonBadge.dart';
 import 'package:mobile_apps/constants/ActiveStatus.dart';
 import 'package:mobile_apps/constants/color.dart' as color;
 import 'package:mobile_apps/helper/FilterRequest.dart';
+import 'package:mobile_apps/models/application_user.dart';
+import 'package:mobile_apps/models/filters/FilterObject.dart';
 import 'package:mobile_apps/models/organization.dart';
-import 'package:mobile_apps/components/Form/RadioButtonBadge.dart';
-import 'package:mobile_apps/components/Form/CheckBoxButtonBadge.dart';
-import 'package:mobile_apps/commons/FilterObj.dart';
 import 'package:mobile_apps/redux/appState.dart';
 
 class FilterBar extends StatefulWidget {
@@ -95,89 +98,99 @@ class _FilterBarState extends State<FilterBar> {
               scrollDirection: Axis.horizontal,
               children: [
                 if (_organization != null || _activeStatus != null) clearFilter(),
-                GestureDetector(
-                  onTap: () {
-                    bottomSheet(
-                      context,
-                      "Cari Berdasarkan Status",
-                      Padding(
-                          padding: const EdgeInsets.all(15),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              const Text("Urutkan", style: TextStyle(fontSize: 15, color: Color.fromRGBO(1, 1, 1, 0.8), fontWeight: FontWeight.w600, letterSpacing: -0.5)),
-                              const SizedBox(height: 7.5,),
-
-                              RadioButtonBadge(
-                                  items: [
-                                    FilterObj(key: "newest", value: "Terbaru"),
-                                    FilterObj(key: "name_asc", value: "Nama Abjad Terkecil"),
-                                    FilterObj(key: "name_desc", value: "Nama Abjad Terbesar"),
-                                  ]
-                              ),
-
-                              const SizedBox(height: 15,),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text("Kategori", style: TextStyle(fontSize: 15, color: Color.fromRGBO(1, 1, 1, 0.8), fontWeight: FontWeight.w600, letterSpacing: -0.5)),
-                                  // Text("Lihat Semua", style: TextStyle(fontSize: 12, color: color.primary, fontWeight: FontWeight.w600, letterSpacing: -0.5)),
-                                  GestureDetector(
-                                    onTap: () {
-                                      bottomSheet(
-                                          context,
-                                          "Cari Berdasarkan Status",
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 15),
-                                            child:
-                                            ListActiveStatus(
-                                              selected: _activeStatus,
-                                              onSelect: (value) async => await setOrderStatus(value),
-                                            ),
-                                          ),
-                                          size: 0.6
-                                      );
-                                    },
-                                    child: const Text("Lihat Semua", style: TextStyle(fontSize: 12, color: color.primary, fontWeight: FontWeight.w600, letterSpacing: -0.5)),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 7.5,),
-                              CheckBoxButtonBadge(
-                                  items: [
-                                    FilterObj(key: "1", value: "Sepatu"),
-                                    FilterObj(key: "2", value: "Celana"),
-                                    FilterObj(key: "3", value: "Jas"),
-                                  ]
-                              ),
-                            ],
-                          )
-                      ),
-                      size: 0.75,
-                      dismissSize: 0.4,
-                      hasRadius: false,
-                      hasAction: true,
-                    );
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.only(left: 12.5, right: 5.5),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: _activeStatus == null ? color.defaultBorderColor : color.primary),
-                      borderRadius: BorderRadius.all(Radius.circular(boxRadius)),
-                      color: _activeStatus == null ? Colors.transparent : color.selectedBackgroundColor,
-                    ),
-                    child: Row(
-                      children: [
-                        Text(_activeStatus == null ? "Filter" : getStatusName(_activeStatus!), style: TextStyle(fontSize: 13, color: _activeStatus == null ? color.defaultTextColor : color.primary, letterSpacing: -0.15),),
-                        const SizedBox(width: 2),
-                        Icon(Icons.keyboard_arrow_down, color: _activeStatus == null ? color.defaultTextColor : color.primary, size: 25),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 5,),
+                // GestureDetector(
+                //   onTap: () {
+                //     bottomSheet(
+                //       context,
+                //       "Cari Berdasarkan Status",
+                //       Padding(
+                //           padding: const EdgeInsets.all(15),
+                //           child: Column(
+                //             crossAxisAlignment: CrossAxisAlignment.stretch,
+                //             mainAxisAlignment: MainAxisAlignment.start,
+                //             mainAxisSize: MainAxisSize.max,
+                //             children: [
+                //               const Text("Urutkan", style: TextStyle(fontSize: 15, color: Color.fromRGBO(1, 1, 1, 0.8), fontWeight: FontWeight.w600, letterSpacing: -0.5)),
+                //               const SizedBox(height: 7.5,),
+                //
+                //               RadioButtonBadge(
+                //                 items: [
+                //                   FilterObject(key: "created_on", value: "DESC",  displayName: "Terbaru"),
+                //                   FilterObject(key: "name", value: "ASC", displayName: "Nama Abjad Terkecil"),
+                //                   FilterObject(key: "name", value: "DESC", displayName: "Nama Abjad Terbesar"),
+                //                 ],
+                //                 callbackResult: (value) => {
+                //                   print((value as FilterObject).key),
+                //                   print((value).value),
+                //                 },
+                //               ),
+                //
+                //               const SizedBox(height: 15,),
+                //               Row(
+                //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //                 children: [
+                //                   const Text("Kategori", style: TextStyle(fontSize: 15, color: Color.fromRGBO(1, 1, 1, 0.8), fontWeight: FontWeight.w600, letterSpacing: -0.5)),
+                //                   // Text("Lihat Semua", style: TextStyle(fontSize: 12, color: color.primary, fontWeight: FontWeight.w600, letterSpacing: -0.5)),
+                //                   GestureDetector(
+                //                     onTap: () {
+                //                       bottomSheet(
+                //                           context,
+                //                           "Cari Berdasarkan Status",
+                //                           Padding(
+                //                             padding: const EdgeInsets.symmetric(horizontal: 15),
+                //                             child:
+                //                             ListActiveStatus(
+                //                               selected: _activeStatus,
+                //                               onSelect: (value) async => await setOrderStatus(value),
+                //                             ),
+                //                           ),
+                //                           size: 0.6
+                //                       );
+                //                     },
+                //                     child: const Text("Lihat Semua", style: TextStyle(fontSize: 12, color: color.primary, fontWeight: FontWeight.w600, letterSpacing: -0.5)),
+                //                   ),
+                //                 ],
+                //               ),
+                //               const SizedBox(height: 7.5,),
+                //               CheckBoxButtonBadge(
+                //                 items: [
+                //                   FilterObject(key: "product_category_id", value: "baju",  displayName: "Baju"),
+                //                   FilterObject(key: "product_category_id", value: "celana", displayName: "Celana"),
+                //                   FilterObject(key: "product_category_id", value: "jas", displayName: "Jas"),
+                //                 ],
+                //                 callbackResult: (value) => {
+                //                   print(jsonEncode(value)),
+                //                 },
+                //               ),
+                //             ],
+                //           )
+                //       ),
+                //       size: 0.75,
+                //       dismissSize: 0.4,
+                //       hasRadius: false,
+                //       hasAction: true,
+                //       onActionPress: () => {
+                //         print("a")
+                //       }
+                //     );
+                //   },
+                //   child: Container(
+                //     padding: const EdgeInsets.only(left: 12.5, right: 5.5),
+                //     decoration: BoxDecoration(
+                //       border: Border.all(color: _activeStatus == null ? color.defaultBorderColor : color.primary),
+                //       borderRadius: BorderRadius.all(Radius.circular(boxRadius)),
+                //       color: _activeStatus == null ? Colors.transparent : color.selectedBackgroundColor,
+                //     ),
+                //     child: Row(
+                //       children: [
+                //         Text(_activeStatus == null ? "Filter" : getStatusName(_activeStatus!), style: TextStyle(fontSize: 13, color: _activeStatus == null ? color.defaultTextColor : color.primary, letterSpacing: -0.15),),
+                //         const SizedBox(width: 2),
+                //         Icon(Icons.keyboard_arrow_down, color: _activeStatus == null ? color.defaultTextColor : color.primary, size: 25),
+                //       ],
+                //     ),
+                //   ),
+                // ),
+                // const SizedBox(width: 5,),
                 GestureDetector(
                   onTap: () {
                     bottomSheet(
@@ -211,7 +224,7 @@ class _FilterBarState extends State<FilterBar> {
                   ),
                 ),
                 const SizedBox(width: 5,),
-                if (true) (
+                if ((state.user as application_user).isSystemAdmin!) (
                   Column(
                     children: [
                       const SizedBox(width: 5,),
