@@ -17,10 +17,13 @@ class CRUDMiddleware extends MiddlewareClass<AppState> {
   @override
   call(Store<AppState> store, action, NextDispatcher next) async {
     var api = Api();
+    late String? token = "";
+    if (store.state.user != null) {
+      token = (store.state.user as application_user).token;
+    }
 
-    String? token = (store.state.user as application_user).token;
-    if (token!.isEmpty) {
-
+    if (token == null) {
+      return;
     }
 
     Map<String,dynamic> headers = <String,dynamic>{};

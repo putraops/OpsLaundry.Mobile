@@ -67,14 +67,19 @@ class UserContext {
     return userContext;
   }
 
-  Future<void> setLogout() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove('storedUser');
+  Future<bool> setLogout() async {
+    try{
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.remove('storedUser');
+    } catch (e) {
+      return false;
+    }
+    return true;
 
-    var context = NavigationService.navigatorKey.currentContext!;
-    await Navigator.of(context).pushAndRemoveUntil(
-       MaterialPageRoute(
-           builder: (BuildContext context) => const LoginPage()),
-           (Route route) => route == null);
+    // var context = NavigationService.navigatorKey.currentContext!;
+    // await Navigator.of(context).pushAndRemoveUntil(
+    //    MaterialPageRoute(
+    //        builder: (BuildContext context) => const LoginPage()),
+    //        (Route route) => route == null);
   }
 }

@@ -17,7 +17,7 @@ import 'package:mobile_apps/utils/TryCast.dart';
 
 class Api {
   final dio = createDio();
-  static const String serverEndpoint = "https://97d6-2001-448a-2040-1a3b-5071-4c56-36f7-671d.ap.ngrok.io";
+  static const String serverEndpoint = "https://e413-2001-448a-2040-1a3b-a90d-9563-d3c-d25b.ap.ngrok.io";
   static const String baseUrl = "$serverEndpoint/api";
 
   Api._internal();

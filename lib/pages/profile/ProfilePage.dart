@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:mobile_apps/context/UserContext.dart';
 import 'package:mobile_apps/redux/actions.dart';
 import 'package:mobile_apps/redux/appState.dart';
 import 'package:mobile_apps/shared/PageDivider.dart';
@@ -37,6 +38,17 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    Future<void> setLogout(PageState state) async {
+      var res = await UserContext().setLogout();
+      if (res) {
+        state.setLogout();
+        // ignore: use_build_context_synchronously
+        Navigator.of(context).pushAndRemoveUntil(
+          // ignore: unnecessary_null_comparison
+            MaterialPageRoute(builder: (BuildContext context) => const LoginPage()), (Route route) => route == null);
+      }
+    }
+
     return Scaffold(
       body: StoreConnector<AppState, PageState>(
         converter: PageState.fromState,
@@ -157,7 +169,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   )),
                                   fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 50))
                               ),
-                              onPressed: () async { await setLogout(); },
+                              onPressed: () async { await setLogout(state); },
                               child: const Text('Keluar', style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.w900,)),
                             ),
                           ],
@@ -174,28 +186,21 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
-
-  Future<void> setLogout() async {
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
-    // await prefs.remove('storedUser');
-    // store.dispatch(SetLogout());
-    // Navigator.of(context).pushAndRemoveUntil(
-    //    MaterialPageRoute(
-    //        builder: (BuildContext context) => const LoginPage()),
-    //        (Route route) => route == null);
-  }
 }
 
 class PageState {
   final application_user? user;
+  final Function() setLogout;
 
   PageState({
     required this.user,
+    required this.setLogout,
   });
 
   static PageState fromState(Store<AppState> store) {
     return PageState(
       user: store.state.user as application_user,
+      setLogout: () => store.dispatch(SetLogout()),
     );
   }
 }

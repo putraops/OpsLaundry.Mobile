@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:mobile_apps/components/CustomAppBar.dart';
 import 'package:mobile_apps/models/pagination/DataTableRequest.dart';
+import 'package:mobile_apps/models/pagination/DataTablesResponse.dart';
 import 'package:mobile_apps/models/product_category.dart';
 import 'package:mobile_apps/helper/FilterRequest.dart';
 import 'package:mobile_apps/pages/master_data/product_category/ProductCategoryDetailPage.dart';
@@ -22,11 +24,12 @@ class ProductCategoryPage extends StatefulWidget {
 class _ProductCategoryPageState extends State<ProductCategoryPage>  {
   bool hasMore = true;
   late bool isInit = true;
-  late bool hasUpdate = false;
+  // late bool hasUpdate = false;
   late FilterRequest filterRequest;
   final repo = BaseRepository("product_category");
 
   late List<product_category> data = [];
+  // late DataTablesResponse dt = DataTablesResponse()
   late DataTableRequest request = DataTableRequest(
     draw: 0,
     page: 1,
@@ -64,16 +67,22 @@ class _ProductCategoryPageState extends State<ProductCategoryPage>  {
     if (isLoadMore) {
       setState(() { request.page = request.page! + 1; });
     }
-    if (request.draw! > 1) {
+
+    var dt = await repo.getPagination(request);
+    print(jsonEncode(dt));
+    if (dt.error != null) {
+
+    }
+
+    if (request.draw! > 0) {
       setState(() { isInit = false; });
     }
 
-    var dt = await repo.getPagination(request);
     if ((dt.data?.length ?? 0 ) > 0) {
       List<product_category> newData = dt.data!.map((item) => product_category.fromJson(item)).toList();
       setState(() {
         data = [...data, ...newData];
-        hasUpdate = true;
+        // hasUpdate = true;
       });
       if (data.length >= (dt.recordsTotal ?? 0)) {
         setState(() { hasMore = false; });
@@ -99,7 +108,7 @@ class _ProductCategoryPageState extends State<ProductCategoryPage>  {
           if (result != null) {
             setState(() {
               data = [...data, ...[result["value"]]];
-              hasUpdate = true;
+              // hasUpdate = true;
             });
             // getPagination(true);
           }
@@ -110,7 +119,7 @@ class _ProductCategoryPageState extends State<ProductCategoryPage>  {
       ),
       body: Column(
         children: [
-          if (true) (
+          if (data.isNotEmpty) (
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5),
                 child: FilterBar(onFilter: onFilter,),

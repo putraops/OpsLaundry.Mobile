@@ -88,12 +88,15 @@ class _ListViewBuilderState extends State<ListViewBuilder> with TickerProviderSt
     if (errorMessage != null) {
       return ErrorPage(message: errorMessage!);
     }
+    print(widget.isInit);
     if (widget.isInit && isLoading) {
       return Skeleton(
         isLoading: true,
         skeleton: SkeletonListView(itemCount: 20, scrollable: false,),
         child: Container(),
       );
+    } else {
+
     }
 
     if (data.isEmpty) {

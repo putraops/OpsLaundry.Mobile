@@ -40,6 +40,7 @@ class DashboardPage extends StatelessWidget {
                     child:  StoreConnector<AppState, PageState>(
                       converter: PageState.fromState,
                       builder: (_, PageState state) {
+                        if (state.user == null) return Container();
                         return Header(state.user as application_user);
                       },
                     ),

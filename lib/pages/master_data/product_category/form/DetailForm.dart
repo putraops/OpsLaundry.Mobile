@@ -53,11 +53,11 @@ class _DetailFormState extends State<DetailForm> {
   Future<void> createOrUpdate() async {
     await loading.show();
     var res = await repo.createOrUpdate(object: data!.toJson());
+    await loading.hide();
     if (res is String) {
       setState(() {errorMessage = res; });
     } else {
       setState(() { data = product_category.fromJson(res); });
-      await loading.hide();
       await appDialog( DialogType.Success, dialogText: "Berhasil ${widget.recordId == null ? "menambah" : "mengubah"} Kategori.",
           callback: (value) async {
             Navigator.pop(context, {
@@ -79,7 +79,9 @@ class _DetailFormState extends State<DetailForm> {
             return const SkeletonAppend(totalLines: 5);
           default:
             if (errorMessage.isNotEmpty) {
-              return ErrorPage(message: errorMessage);
+              return ErrorPage(message: errorMessage, hasButton: true, buttonText: "Kembali", textSize: 16, onPress: () {
+                Navigator.pop(context);
+              },);
             } else {
               return ListView(
                   children: [

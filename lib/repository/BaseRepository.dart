@@ -26,12 +26,14 @@ class BaseRepository {
       headers["Authorization"] = token;
     }
 
+    late bool isNew = true;
     try {
       Response response;
       var temp = TryCast().toObject<Map<String, dynamic>>(object);
       if (temp!["id"] == null) {
         response = await api.dio.post('/$_module/create', data: object, options: Options(headers: headers));
       } else {
+        isNew = false;
         response = await api.dio.patch('/$_module/update', data: object, options: Options(headers: headers));
       }
 
@@ -50,7 +52,19 @@ class BaseRepository {
           break;
       }
     } on DioError catch (e) {
-      print(e.response);
+      var temp = TryCast().toObject<ErrorResponse>(e.response?.data);
+      try {
+        var errResponse = ErrorResponse.fromJson(e.response?.data);
+        result = errResponse.error;
+      } on Exception catch (e) {
+        print("==================================================");
+        if (isNew) {
+          result = "Failed to create an item";
+        } else {
+          result = "Failed to update the item";
+        }
+        print("==================================================");
+      }
     }
     return result;
   }
