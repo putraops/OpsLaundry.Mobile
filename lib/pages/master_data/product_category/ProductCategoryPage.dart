@@ -117,71 +117,54 @@ class _ProductCategoryPageState extends State<ProductCategoryPage> {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, PageState>(
-        converter: PageState.fromState,
-        builder: (_, PageState state) {
-          return Scaffold(
-              backgroundColor: Colors.white,
-              appBar: customAppBar(
-                context,
-                title: "Kategori Barang",
-                centerTitle: true,
+      converter: PageState.fromState,
+      builder: (_, PageState state) {
+        return Scaffold(
+          backgroundColor: Colors.white,
+          appBar: customAppBar(
+            context,
+            title: "Kategori Barang",
+            centerTitle: true,
+          ),
+          floatingActionButton: ((state.user!.isSystemAdmin! || state.user!.isAdmin!)) ?
+            FloatingActionButton(
+              onPressed: () async {
+                final result = await Navigator.push( context, MaterialPageRoute(builder: (context) =>  const ProductCategoryDetailPage()),);
+                if (result != null) {
+                  setState(() { data = [ ...data, ...[result["value"]] ];  hasUpdate = true; });
+                }
+              },
+              backgroundColor: color.primary,
+              tooltip: "Tambah Barang",
+              child: const Icon(
+                Icons.add,
+                size: 30,
               ),
-              floatingActionButton:
-                  ((state.user!.isSystemAdmin! || state.user!.isAdmin!))
-                      ? FloatingActionButton(
-                          onPressed: () async {
-                            final result = await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const ProductCategoryDetailPage()),
-                            );
-                            if (result != null) {
-                              setState(() {
-                                data = [
-                                  ...data,
-                                  ...[result["value"]]
-                                ];
-                                hasUpdate = true;
-                              });
-                              // getPagination(true);
-                            }
-                          },
-                          backgroundColor: color.primary,
-                          tooltip: "Tambah Barang",
-                          child: const Icon(
-                            Icons.add,
-                            size: 30,
-                          ),
-                        )
-                      : null,
-              body: Column(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 5),
-                    margin: EdgeInsets.symmetric(
-                        horizontal: request.draw! <= 1 && isLoading ? 7.5 : 0),
-                    child: request.draw! <= 1 && isLoading
-                        ? const SkeletonAppend(
-                            total: 3,
-                            type: SkeletonType.Item,
-                            height: 30,
-                            width: 100,
-                          )
-                        : FilterBar(
-                            onFilter: onFilter,
-                          ),
-                  ),
-                  Expanded(
-                    child: ListViewBuilder(
-                        isInit: isInit,
-                        data: data,
-                        hasMore: hasMore,
-                        fetch: (value) => getPagination(value)),
-                  )
-                ],
-              ));
-        });
+            ) : null,
+          body: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 5),
+                margin: EdgeInsets.symmetric(
+                    horizontal: request.draw! <= 1 && isLoading ? 7.5 : 0),
+                child: request.draw! <= 1 && isLoading ?
+                  const SkeletonAppend(
+                    total: 3,
+                    type: SkeletonType.Item,
+                    height: 30,
+                    width: 100,
+                  ) : FilterBar(onFilter: onFilter,),
+              ),
+              Expanded(
+                child: ListViewBuilder(
+                  isInit: isInit,
+                  data: data,
+                  hasMore: hasMore,
+                  fetch: (value) => getPagination(value)),
+              )
+            ],
+          ));
+      });
   }
 }
 
