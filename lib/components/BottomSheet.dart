@@ -82,6 +82,7 @@ void bottomSheet(context, String title, Widget widget,
     bool? hasRadius = true,
     bool? hasAction,
     double? actionHeight,
+    void Function()? onActionPress,
   })
 {
   var _titleStyle = titleStyle ?? const TextStyle(fontSize: 17, color: Color.fromRGBO(1, 1, 1, 0.8), fontWeight: FontWeight.w600, letterSpacing: -0.5);
@@ -160,7 +161,7 @@ void bottomSheet(context, String title, Widget widget,
                     ],
                   ),
                 ),
-                if (hasAction ?? false) bottomSheetAction(context, actionHeight ?? 55)
+                if (hasAction ?? false) bottomSheetAction(context, onActionPress, actionHeight ?? 55)
               ],
             );
           },
@@ -170,7 +171,7 @@ void bottomSheet(context, String title, Widget widget,
   );
 }
 
-Widget bottomSheetAction(BuildContext context, double actionHeight) {
+Widget bottomSheetAction(BuildContext context, void Function()? onPress, double actionHeight) {
   return Positioned(
     bottom: 0,
     left: 0,
@@ -199,9 +200,8 @@ Widget bottomSheetAction(BuildContext context, double actionHeight) {
               ),
               elevation: 0
           ),
+          onPressed: onPress,
           child: const Text('Tampilkan', style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w900)),
-          onPressed: () {
-          },
         ),
       ),
     ),

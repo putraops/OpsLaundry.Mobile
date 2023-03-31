@@ -3,8 +3,6 @@ import 'package:mobile_apps/components/GreySeparator.dart';
 import 'package:mobile_apps/components/SkeletonAppend.dart';
 import 'package:mobile_apps/models/product.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:mobile_apps/components/CustomAlertDialog.dart';
-import 'package:mobile_apps/constants/ActiveStatus.dart';
 import 'package:mobile_apps/navigation/AnimateNavigation.dart';
 import 'package:mobile_apps/constants/color.dart' as color;
 import 'package:mobile_apps/pages/master_data/product/DetailPage.dart';
@@ -62,7 +60,7 @@ class _ListItemState extends State<ListItem> {
       return Column(
         children: const [
           SkeletonAppend(
-            totalLines: 1,
+            total: 1,
           ),
           Text("Sedang memuat...", style: TextStyle(fontSize: 12, color: Color.fromRGBO(1, 1, 1, 0.75)),),
         ],

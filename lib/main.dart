@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:mobile_apps/context/UserContext.dart';
 import 'package:mobile_apps/pages/master_data/product_category/ProductCategoryDetailPage.dart';
 import 'package:mobile_apps/pages/master_data/product_category/ProductCategoryPage.dart';
+import 'package:mobile_apps/pages/outlet/OutletPage.dart';
 import 'package:mobile_apps/redux/store.dart';
 import 'package:redux/redux.dart';
 import 'package:mobile_apps/pages/auth/LoginPage.dart';
@@ -134,6 +135,7 @@ class _MainState extends State<Main> {
         routes: {
           MainNavigation.route: (route) => MainNavigation(widget.store),
           ProductCategoryPage.route: (route) => const ProductCategoryPage(),
+          OutletPage.route: (route) => const OutletPage(),
           ProductCategoryDetailPage.route: (route) => const ProductCategoryDetailPage(),
         },
         initialRoute: MainNavigation.route,

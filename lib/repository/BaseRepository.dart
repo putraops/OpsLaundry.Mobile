@@ -15,10 +15,11 @@ class BaseRepository {
     _module = module;
   }
 
-  Future<dynamic> createOrUpdate({required dynamic object, String? token }) async {
+  Future<dynamic> createOrUpdate(
+      {required dynamic object, String? token}) async {
     var api = Api();
     dynamic result;
-    Map<String,dynamic> headers = <String,dynamic>{};
+    Map<String, dynamic> headers = <String, dynamic>{};
     if (token == null) {
       var accessToken = await UserContext().getToken() ?? "";
       headers["Authorization"] = accessToken;
@@ -31,13 +32,15 @@ class BaseRepository {
       Response response;
       var temp = TryCast().toObject<Map<String, dynamic>>(object);
       if (temp!["id"] == null) {
-        response = await api.dio.post('/$_module/create', data: object, options: Options(headers: headers));
+        response = await api.dio.post('/$_module/create',
+            data: object, options: Options(headers: headers));
       } else {
         isNew = false;
-        response = await api.dio.patch('/$_module/update', data: object, options: Options(headers: headers));
+        response = await api.dio.patch('/$_module/update',
+            data: object, options: Options(headers: headers));
       }
 
-      switch(response.statusCode){
+      switch (response.statusCode) {
         case 200:
           result = response.data;
           break;
@@ -48,7 +51,8 @@ class BaseRepository {
           result = "Data dengan id ${temp["id"]} tidak ditemukan!";
           break;
         default:
-          AppSnackBar().error("Something went wrong!", "There is an unrecognized response from server.");
+          AppSnackBar().error("Something went wrong!",
+              "There is an unrecognized response from server.");
           break;
       }
     } on DioError catch (e) {
@@ -69,12 +73,12 @@ class BaseRepository {
     return result;
   }
 
-  Future<dynamic> getById({required String id, String? token }) async {
+  Future<dynamic> getById({required String id, String? token}) async {
     var api = Api();
     dynamic result;
-    Map<String,dynamic> headers = <String,dynamic>{};
+    Map<String, dynamic> headers = <String, dynamic>{};
 
-    try{
+    try {
       if (token == null) {
         var accessToken = await UserContext().getToken() ?? "";
         headers["Authorization"] = accessToken;
@@ -82,13 +86,15 @@ class BaseRepository {
         headers["Authorization"] = token;
       }
 
-      var response = await api.dio.get("/$_module/getById/$id", options: Options(headers: headers));
+      var response = await api.dio
+          .get("/$_module/getById/$id", options: Options(headers: headers));
       if (response.statusCode == 200) {
         result = response.data;
       } else if (response.statusCode == 204) {
         result = "Data dengan id $id tidak ditemukan!";
-      }  else {
-        AppSnackBar().error("Something went wrong!", "There is an unrecognized response from server.");
+      } else {
+        AppSnackBar().error("Something went wrong!",
+            "There is an unrecognized response from server.");
       }
     } on DioError catch (e) {
       print(e.response);
@@ -96,12 +102,13 @@ class BaseRepository {
     return result;
   }
 
-  Future<DataTablesResponse> getPagination(DataTableRequest request, { String? token }) async {
+  Future<DataTablesResponse> getPagination(DataTableRequest request,
+      {String? token}) async {
     var api = Api();
     DataTablesResponse dt = DataTablesResponse();
-    Map<String,dynamic> headers = <String,dynamic>{};
+    Map<String, dynamic> headers = <String, dynamic>{};
 
-    try{
+    try {
       if (token == null) {
         var accessToken = await UserContext().getToken() ?? "";
         headers["Authorization"] = accessToken;
@@ -123,10 +130,10 @@ class BaseRepository {
     return dt;
   }
 
-  Future<StandardResult> deleteById({required String id, String? token }) async {
+  Future<StandardResult> deleteById({required String id, String? token}) async {
     var api = Api();
     StandardResult response;
-    Map<String,dynamic> headers = <String,dynamic>{};
+    Map<String, dynamic> headers = <String, dynamic>{};
     if (token == null) {
       var accessToken = await UserContext().getToken() ?? "";
       headers["Authorization"] = accessToken;
@@ -135,21 +142,30 @@ class BaseRepository {
     }
 
     try {
-      var result = await api.dio.delete("/$_module/deleteById/$id",options: Options(method: "DELETE", headers: headers),);
-      switch(result.statusCode){
+      var result = await api.dio.delete(
+        "/$_module/deleteById/$id",
+        options: Options(method: "DELETE", headers: headers),
+      );
+      switch (result.statusCode) {
         case 200:
-          response = StandardResult(success: true, message: "Berhasil menghapus data!", data: null);
+          response = StandardResult(
+              success: true, message: "Berhasil menghapus data!", data: null);
           break;
         case 204:
-          response = StandardResult(success: false, message: "Data dengan $id tidak ditemukan!", data: null);
+          response = StandardResult(
+              success: false,
+              message: "Data dengan $id tidak ditemukan!",
+              data: null);
           break;
         default:
           var errorResponse = ErrorResponse.fromJson(result.data);
-          response = StandardResult(success: false, message: errorResponse.error, data: null);
+          response = StandardResult(
+              success: false, message: errorResponse.error, data: null);
           break;
       }
     } on DioError catch (e) {
-      response = StandardResult(success: false, message: e.response as String, data: null);
+      response = StandardResult(
+          success: false, message: e.response as String, data: null);
     }
     return response;
   }
